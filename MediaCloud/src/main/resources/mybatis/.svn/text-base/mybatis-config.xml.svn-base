@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>    
+
+	<!--通过package, 可以直接指定package的名字， mybatis会自动扫描你指定包下面的javabean-->
+	<typeAliases>
+		<typeAlias alias="EnterpriseUserPassport" type="com.ehui.domain.EnterpriseUserPassport"/>
+		<typeAlias alias="EnterpriseUserInfo" type="com.ehui.domain.EnterpriseUserInfo"/>
+		<typeAlias alias="Role" type="com.ehui.domain.Role"/>
+		<typeAlias alias="OfficialAccounts" type="com.ehui.domain.OfficialAccounts"/>
+		<typeAlias alias="WxGlobalParam" type="com.ehui.domain.WxGlobalParam"/>
+		<typeAlias alias="WxTag" type="com.ehui.domain.WxTag"/>
+		<typeAlias alias="WxUser" type="com.ehui.domain.WxUser"/>
+		<typeAlias alias="WxMessage" type="com.ehui.domain.WxMessage"/>
+		<typeAlias alias="WxMenu" type="com.ehui.domain.WxMenu"/>
+		<typeAlias alias="WxSubMenu" type="com.ehui.domain.WxSubMenu"/>
+		<typeAlias alias="WxKeywords" type="com.ehui.domain.WxKeywords"/>
+		<typeAlias alias="WxNews" type="com.ehui.domain.WxNews"/>
+		<typeAlias alias="WxText" type="com.ehui.domain.WxText"/>
+		<typeAlias alias="WxSystemReply" type="com.ehui.domain.WxSystemReply"/>
+		<typeAlias alias="WxMaterialNews" type="com.ehui.domain.WxMaterialNews"/>
+		<typeAlias alias="WxMaterial" type="com.ehui.domain.WxMaterial"/>
+		<typeAlias alias="WxChannel" type="com.ehui.domain.WxChannel"/>
+		<typeAlias alias="WxChannelUser" type="com.ehui.domain.WxChannelUser"/>
+		<typeAlias alias="WxTemplate" type="com.ehui.domain.WxTemplate"/>
+		<typeAlias alias="WxEventTemplate" type="com.ehui.domain.WxEventTemplate"/>
+	   <!-- <typeAlias alias="WxMass" type="com.ehui.domain.WxMass"/> -->
+		<typeAlias alias="Result" type="com.ehui.domain.Result"/>
+	</typeAliases>
+	<plugins>
+  <!-- com.github.pagehelper为PageHelper类所在包名 -->
+  <plugin interceptor="com.github.pagehelper.PageHelper">
+    <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->    
+    <property name="dialect" value="mysql"/>
+  </plugin>
+</plugins>
+	
+</configuration>

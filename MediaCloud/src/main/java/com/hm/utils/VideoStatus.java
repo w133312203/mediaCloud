@@ -1,0 +1,8 @@
+package com.hm.utils;
+
+public enum VideoStatus {
+	
+	UPLOADING, UPLOADFAIL, UPLOADCUSS, TRANSCODING, TRANSCODEFAIL, CHECKING, BLOCKED, NORMAL;
+	
+	
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.dao.PropertyDao">
+
+	<insert id="save" parameterType="com.hm.domain.Property"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hm_property
+		(passportId,title,level,groupId,type) values
+		(#{passportId},#{title},#{level},#{groupId},#{type})
+	</insert>
+
+	<update id="update">
+		update hm_property set passportId =
+		#{passportId},title = #{title},level = #{level},groupId = #{groupId},type = #{type}
+		where id = #{id}
+	</update>
+
+	<select id="findById" resultType="Property">
+		select * from
+		hm_property where id = #{id}
+	</select>
+	
+	<delete id="deleteById">
+		delete from hm_property where id = #{id}
+	</delete>
+	
+	<select id="list" resultType="Property">
+		select p.*
+		from hm_property p where p.passportId is null and p.groupId = #{groupId} and p.type = #{type}
+
+		<if test="search!=null and search!=''">
+			and (p.title like #{search})
+		</if>
+
+		order by p.level,p.id desc limit #{first},#{max}
+	</select>
+	
+	<select id="listAll" resultType="Property">
+		select p.*
+		from hm_property p where p.passportId is null and p.groupId = #{groupId} and p.type = #{type}
+
+		order by p.level,p.id desc
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(p.id) from hm_property
+		p where p.passportId is null and p.groupId = #{groupId} and p.type = #{type}
+
+		<if test="search!=null and search!=''">
+			and (p.title like #{search})
+		</if>
+
+	</select>
+
+</mapper>

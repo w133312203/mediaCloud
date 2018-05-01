@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>    
+
+	<!--通过package, 可以直接指定package的名字， mybatis会自动扫描你指定包下面的javabean-->
+	<typeAliases>
+		<typeAlias alias="EnterpriseUserPassport" type="com.hm.domain.EnterpriseUserPassport"/>
+		<typeAlias alias="EnterpriseUserInfo" type="com.hm.domain.EnterpriseUserInfo"/>
+		<typeAlias alias="Role" type="com.hm.domain.Role"/>
+		<typeAlias alias="Group" type="com.hm.domain.Group"/>
+		<typeAlias alias="Picture" type="com.hm.domain.Picture"/>
+		<typeAlias alias="Video" type="com.hm.domain.Video"/>
+		<typeAlias alias="Property" type="com.hm.domain.Property"/>
+	</typeAliases>
+	<plugins>
+  <!-- com.github.pagehelper为PageHelper类所在包名 -->
+  <plugin interceptor="com.github.pagehelper.PageHelper">
+    <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->    
+    <property name="dialect" value="mysql"/>
+  </plugin>
+</plugins>
+	
+</configuration>

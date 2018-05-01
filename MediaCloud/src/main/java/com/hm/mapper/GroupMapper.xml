@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.dao.GroupDao">
+
+	<insert id="save" parameterType="com.hm.domain.Group"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hm_group
+		(passportId,title,level,groupId,type,hierarchy,uploadType) values
+		(#{passportId},#{title},#{level},#{groupId},#{type},#{hierarchy},#{uploadType})
+	</insert>
+
+	<update id="update">
+		update hm_group set passportId =
+		#{passportId},title = #{title},level = #{level},groupId = #{groupId},uploadType = #{uploadType}
+		where id = #{id}
+	</update>
+
+	<select id="findById" resultType="Group">
+		select * from
+		hm_group g where g.id = #{id}
+	</select>
+	
+	<delete id="deleteById">
+		delete from hm_group where id = #{id}
+	</delete>
+	
+	<select id="list" resultType="java.util.HashMap">
+		select g.*
+		from hm_group g where g.passportId is null and g.groupId = #{id}
+
+		<if test="search!=null and search!=''">
+			and (g.title like #{search})
+		</if>
+
+		order by g.level,g.id desc 
+		<if test="first!=null and max!=null">
+			limit #{first},#{max}
+		</if>
+		
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(g.id) from hm_group
+		g where g.passportId is null and g.groupId = #{id}
+
+		<if test="search!=null and search!=''">
+			and (g.title like #{search})
+		</if>
+
+	</select>
+	
+	<select id="findListByHier" resultType="java.util.HashMap">
+		select g.*
+		from hm_group g where g.passportId is null and g.type = #{type} and g.hierarchy = #{hierarchy}
+
+		order by g.level,g.id desc
+	</select>
+	
+	<select id="findListByHierSec" resultType="Group">
+		select g1.*
+		from hm_group g1 inner join hm_group g2 on g1.groupId = g2.id where g1.passportId is null and g1.type = #{type} and g1.hierarchy = 2
+
+		order by g2.level, g1.level,g1.id desc
+	</select>
+	
+	<select id="findUpGroup" resultType="Group">
+		select g.*
+		from hm_group g where g.passportId is null and g.type = #{type} and g.groupId = 0
+	</select>
+	
+	<select id="findGroupByType" resultType="java.util.HashMap">
+		select g.*
+		from hm_group g where g.passportId is null and g.type = #{type} order by g.hierarchy
+	</select>
+	
+	<select id="findGroupByUploadType" resultType="java.util.HashMap">
+		select g.*
+		from hm_group g where g.passportId is null and g.type = #{type} and (g.uploadType = #{uploadType} or g.uploadType = 0) order by g.hierarchy
+	</select>
+
+</mapper>

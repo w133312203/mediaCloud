@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.dao.EnterpriseUserPassportDao">
+
+	<insert id="save" parameterType="com.hm.domain.EnterpriseUserPassport"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hm_enterprise_user_passport
+		(email,mobileNum,password,status,leaderId,roleId) values
+		(#{email},#{mobileNum},#{password},#{status},#{leaderId},#{roleId})
+	</insert>
+
+	<update id="update">
+		update hm_enterprise_user_passport set password =
+		#{password}
+		where id = #{id}
+	</update>
+
+	<select id="findEnterpriseUserPassport" resultType="EnterpriseUserPassport">
+		select * from
+		hm_enterprise_user_passport ep where (ep.email = #{email} or
+		ep.mobileNum = #{mobileNum}) and ep.password = #{password} and
+		ep.status=1
+	</select>
+
+	<select id="findInfo" resultType="java.util.Map">
+		select
+		e.id,e.email,e.mobileNum,ei.companyName,ei.position
+		,ei.realName,ei.headImage from hm_enterprise_user_passport e left
+		join hm_enterprise_user_info ei on ei.passportId = e.id where e.id =
+		#{id}
+	</select>
+
+	<select id="findById" resultType="EnterpriseUserPassport">
+		select * from
+		hm_enterprise_user_passport ep where ep.id = #{id}
+	</select>
+
+</mapper>

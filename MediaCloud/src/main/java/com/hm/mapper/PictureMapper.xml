@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.dao.PictureDao">
+
+	<insert id="save" parameterType="com.hm.domain.Picture"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hm_picture
+		(passportId,title,url,createTime,groupId,size,propertyId,delType) values
+		(#{passportId},#{title},#{url},#{createTime},#{groupId},#{size},#{propertyId},#{delType})
+	</insert>
+
+	<update id="update">
+		update hm_picture set groupId = #{groupId},propertyId = #{propertyId},delType = #{delType}
+		where id = #{id}
+	</update>
+	
+	<update id="deleteProperty">
+		update hm_picture set propertyId = null
+		where propertyId = #{propertyId}
+	</update>
+	
+	<update id="updateUpGroup">
+		update hm_picture set groupId = #{newGroupId}
+		where groupId = #{oldGroupId}
+	</update>
+
+	<select id="findById" resultType="Picture">
+		select * from
+		hm_picture p where p.id = #{id}
+	</select>
+	
+	<select id="list" resultType="java.util.Map">
+		select p.*,(case when g.groupId = 0 then '未分组' else g.title end) as groupTitle
+		from hm_picture p inner join hm_group g
+		on p.groupId = g.id where
+		p.passportId is null and g.type = #{type} and p.delType = 1
+
+		<if test="groupId!=null and groupId!=''">
+			and p.groupId = #{groupId}
+		</if>
+		
+		<if test="propertyId!=null and propertyId!=''">
+			and p.propertyId = #{propertyId}
+		</if>
+
+		order by p.createTime desc limit #{first},#{max}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(p.id)
+		from hm_picture p inner join hm_group g
+		on p.groupId = g.id where
+		p.passportId is null and g.type = #{type} and p.delType = 1
+
+		<if test="groupId!=null and groupId!=''">
+			and p.groupId = #{groupId}
+		</if>
+		
+		<if test="propertyId!=null and propertyId!=''">
+			and p.propertyId = #{propertyId}
+		</if>
+
+	</select>
+	
+	<select id="deleteById">
+		update hm_picture set delType = 0 where id = #{id};
+	</select>
+	
+	<select id="deleteByArrayId">
+		update hm_picture set delType = 0 where id in (
+		<foreach collection="array" item="item" separator=",">
+			#{item}
+		</foreach>
+		);
+	</select>
+	
+</mapper>

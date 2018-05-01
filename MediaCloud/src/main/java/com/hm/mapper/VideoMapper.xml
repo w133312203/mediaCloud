@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.dao.VideoDao">
+
+	<insert id="save" parameterType="com.hm.domain.Video"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hm_video
+		(passportId,title,headImage,size,status,
+		time,createTime,od_address,ld_address,groupId,propertyId,
+		fileName,formats,videoId,delType)
+		values
+		(#{passportId},#{title},#{headImage},#{size},#{status},
+		#{time},#{createTime},#{od_address},#{ld_address},#{groupId},#{propertyId},
+		#{fileName},#{formats},#{videoId},#{delType})
+	</insert>
+
+	<update id="update">
+		update hm_video set passportId = #{passportId},
+		title = #{title},headImage = #{headImage},size =
+		#{size},status = #{status},time = #{time},createTime =
+		#{createTime},od_address = #{od_address},ld_address =
+		#{ld_address},groupId = #{groupId},propertyId = #{propertyId},fileName = #{fileName},formats =
+		#{formats},videoId = #{videoId},delType = #{delType}
+		where id = #{id}
+	</update>
+	
+	<update id="updateUpGroup">
+		update hm_video set groupId = #{newGroupId}
+		where groupId = #{oldGroupId}
+	</update>
+	
+	<update id="deleteProperty">
+		update hm_video set propertyId = null
+		where propertyId = #{propertyId}
+	</update>
+	
+	<update id="deleteByVideoId">
+		update hm_video set delType = 0 where videoId = #{videoId}
+	</update>
+
+	<select id="findById" resultType="Video">
+		select * from
+		hm_video v where
+		v.id = #{id}
+	</select>
+	
+	<update id="deleteById">
+		update hm_video set delType = 0 where id = #{id}
+	</update>
+
+	<select id="list" resultType="java.util.Map">
+		select v.*,(case when g.groupId = 0 then '未分组' else g.title end) as groupTitle
+		from hm_video v inner join hm_group g
+		on v.groupId = g.id where
+		v.passportId is null and g.type = #{type} and v.delType = 1
+
+		<if test="groupId!=null and groupId!=''">
+			and v.groupId = #{groupId}
+		</if>
+		<if test="search!=null and search!=''">
+			and (v.title like #{search})
+		</if>
+
+		order by v.createTime desc limit #{first},#{max}
+	</select>
+	
+	<select id="apiList" resultType="java.util.Map">
+		select v.*,(case when g.groupId = 0 then '未分组' else g.title end) as groupTitle
+		from hm_video v inner join hm_group g
+		on v.groupId = g.id where g.type = #{type} and v.delType = 1 and v.status = 7
+
+		<if test="groupId!=null and groupId!=''">
+			and v.groupId = #{groupId}
+		</if>
+		<if test="search!=null and search!=''">
+			and (v.title like #{search})
+		</if>
+
+		order by v.createTime desc limit #{first},#{max}
+	</select>
+	
+	<select id="findByVideoId" resultType="Video">
+		select * from
+		hm_video v where
+		v.videoId = #{videoId}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(v.id) from hm_video v inner join hm_group g on v.groupId = g.id where
+		v.passportId is null and g.type = #{type} and v.delType = 1
+
+		<if test="groupId!=null and groupId!=''">
+			and v.groupId = #{groupId}
+		</if>
+		<if test="search!=null and search!=''">
+			and (v.title like #{search})
+		</if>
+
+	</select>
+
+</mapper>

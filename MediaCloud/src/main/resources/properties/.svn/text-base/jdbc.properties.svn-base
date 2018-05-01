@@ -1,0 +1,10 @@
+jdbc_driverClassName=com.mysql.jdbc.Driver
+jdbc_url=jdbc:mysql://localhost:3306/hdb?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+#jdbc_url=jdbc:mysql://47.93.123.117:3306/ehubwx?useUnicode=true&characterEncoding=utf8
+jdbc_username=root
+jdbc_password=root
+#jdbc_password=Ehub2017
+#jdbc_driverClassName=com.mysql.jdbc.Driver
+#jdbc_url=jdbc:mysql://rdsezn3miezn3mi.mysql.rds.aliyuncs.com:3306/ehub?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;mysqlEncoding=utf8
+#jdbc_username=ehub
+#jdbc_password=eHub_RDSdb2016
