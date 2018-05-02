@@ -34,6 +34,11 @@ public class EnterpriseUserInfoServiceImpl implements
 		}
 		return info;
 	}
+	
+	@Override
+	public void deleteByPassportId(Integer passportId) {
+		euserInfoDao.deleteByPassportId(passportId);
+	}
 
 	@Override
 	public void save(EnterpriseUserInfo t) {

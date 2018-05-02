@@ -60,7 +60,7 @@
                                     <input class="form-control" placeholder="账号" id="passport" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="请输入账号">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="密码" id="password" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="请输入密码">
+                                    <input class="form-control" placeholder="密码" id="password" type="password" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="请输入密码">
                                 </div>
                                 <div class="checkbox">
                                     <label>
@@ -105,6 +105,7 @@
 			
 	    	function checkEuser() {
 				var passport = $("#passport").val();
+				passport = $.trim(passport);
 				var password = $("#password").val();
 				
 				if(passport==''){

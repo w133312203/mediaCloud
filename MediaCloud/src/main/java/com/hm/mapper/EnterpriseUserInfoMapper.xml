@@ -7,13 +7,13 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into
 		hm_enterprise_user_info
-		(headImage,passportId,realName,companyName,position) values
-		(#{headImage},#{passportId},#{realName},#{companyName},#{position})
+		(headImage,passportId,realName,companyName,position,regTime) values
+		(#{headImage},#{passportId},#{realName},#{companyName},#{position},#{regTime})
 	</insert>
 
 	<update id="update" parameterType="EnterpriseUserInfo">
 		update hm_enterprise_user_info set realName = #{realName},
-		companyName = #{companyName} ,position = #{position}
+		companyName = #{companyName} ,position = #{position}, lastLoginTime = #{lastLoginTime}
 		<if test="headImage!=null and headImage!=''">
 			,headImage = #{headImage}
 		</if>
@@ -24,5 +24,13 @@
 		select * from hm_enterprise_user_info ei where ei.passportId =
 		#{passportId}
 	</select>
+	
+	<update id="deleteById">
+		delete from hm_enterprise_user_info where id = #{id}
+	</update>
+	
+	<update id="deleteByPassportId">
+		delete from hm_enterprise_user_info where passportId = #{passportId}
+	</update>
 
 </mapper>

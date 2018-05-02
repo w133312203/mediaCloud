@@ -13,4 +13,10 @@ public interface EnterpriseUserInfoDao extends BaseDao<EnterpriseUserInfo>{
 	 */
 	public EnterpriseUserInfo findEnterpriseUserInfoByPassportId(@Param("passportId")Integer passportId);
 	
+	/**
+	 * 根据passportId删除账户
+	 * @param passportId
+	 */
+	public void deleteByPassportId(@Param("passportId")Integer passportId);
+	
 }

@@ -7,13 +7,13 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into
 		hm_enterprise_user_passport
-		(email,mobileNum,password,status,leaderId,roleId) values
-		(#{email},#{mobileNum},#{password},#{status},#{leaderId},#{roleId})
+		(email,mobileNum,password,status,leaderId,roleId,type) values
+		(#{email},#{mobileNum},#{password},#{status},#{leaderId},#{roleId},#{type})
 	</insert>
 
 	<update id="update">
 		update hm_enterprise_user_passport set password =
-		#{password}
+		#{password},email = #{email},mobileNum = #{mobileNum},type = #{type}
 		where id = #{id}
 	</update>
 
@@ -23,10 +23,28 @@
 		ep.mobileNum = #{mobileNum}) and ep.password = #{password} and
 		ep.status=1
 	</select>
+	
+	<select id="checkEmail" resultType="EnterpriseUserPassport">
+		select * from
+		hm_enterprise_user_passport ep where ep.email = #{email}
+		
+		<if test="id!=null and id!=''">
+			and ep.id &lt;&gt; #{id}
+		</if>
+	</select>
+	
+	<select id="checkMobileNum" resultType="EnterpriseUserPassport">
+		select * from
+		hm_enterprise_user_passport ep where ep.mobileNum = #{mobileNum}
+		
+		<if test="id!=null and id!=''">
+			and ep.id &lt;&gt; #{id}
+		</if>
+	</select>
 
 	<select id="findInfo" resultType="java.util.Map">
 		select
-		e.id,e.email,e.mobileNum,ei.companyName,ei.position
+		e.id,e.email,e.mobileNum,ei.companyName,e.type,ei.position
 		,ei.realName,ei.headImage from hm_enterprise_user_passport e left
 		join hm_enterprise_user_info ei on ei.passportId = e.id where e.id =
 		#{id}
@@ -36,5 +54,36 @@
 		select * from
 		hm_enterprise_user_passport ep where ep.id = #{id}
 	</select>
+	
+	<select id="list" resultType="java.util.Map">
+		select up.*,ui.*
+		from hm_enterprise_user_passport up inner join hm_enterprise_user_info ui
+		on up.id = ui.passportId where 1=1
+
+		<if test="search!=null and search!=''">
+			and (ui.realName like '%${search}%' or up.email like '%${search}%' or up.mobileNum like '%${search}%') 
+		</if>
+
+		order by up.id desc limit #{first},#{max}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(up.id)
+		from hm_enterprise_user_passport up inner join hm_enterprise_user_info ui
+		on up.id = ui.passportId where 1=1
+
+		<if test="search!=null and search!=''">
+			and (ui.realName like '%${search}%' or up.email like '%${search}%' or up.mobileNum like '%${search}%') 
+		</if>
+		
+	</select>
+	
+	<update id="deleteById">
+		delete from hm_enterprise_user_passport where id = #{id}
+	</update>
+	
+	<update id="updateStatus">
+		update hm_enterprise_user_passport set status = ${status} where id = #{id}
+	</update>
 
 </mapper>

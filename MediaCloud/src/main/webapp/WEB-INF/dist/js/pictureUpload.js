@@ -98,7 +98,7 @@ jQuery(function() {
 
         disableGlobalDnd: true,
 
-        chunked: true,
+        chunked: false,
         //server: 'https://www.ehuami.cn/mediaCloud/picture/upload',
         server: 'http://localhost:8080/mediaCloud/picture/upload', 
         compress: false,

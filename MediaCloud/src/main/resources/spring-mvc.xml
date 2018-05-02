@@ -97,38 +97,9 @@
         <!-- 多个拦截器，顺序执行 -->  
         <mvc:interceptor>  
         	<!-- 拦截范围 -->
-            <mvc:mapping path="/**"/>
+            <mvc:mapping path="/**/index/**"/>
             <!-- 不被拦截范围 -->
-            <mvc:exclude-mapping path="/vendor/**"/>
-            <mvc:exclude-mapping path="/api/**"/>
-            <mvc:exclude-mapping path="/css/**"/>
-            <mvc:exclude-mapping path="/dist/**"/>
-            <mvc:exclude-mapping path="/img/**"/>
-            <mvc:exclude-mapping path="/js/**"/>
-            <mvc:exclude-mapping path="/login/**"/>
-            <mvc:exclude-mapping path="/logout"/>
-            <mvc:exclude-mapping path="/ueditor/**"/>
-            <mvc:exclude-mapping path="/checkPassport"/>
-            <mvc:exclude-mapping path="/jsapi"/>
-            <mvc:exclude-mapping path="/weiXinResponse"/>
-            <mvc:exclude-mapping path="/jsapiPay"/>
-            <mvc:exclude-mapping path="/notifyUrl"/>
-            <mvc:exclude-mapping path="/auth"/>
-            <mvc:exclude-mapping path="/linkEhub"/>
-            <mvc:exclude-mapping path="/forgetPwd"/>
-            <mvc:exclude-mapping path="/validateCode"/>
-            <mvc:exclude-mapping path="/checkEuserEmail"/>
-            <mvc:exclude-mapping path="/checkEuserMobilenum"/>
-            <mvc:exclude-mapping path="/vCode"/>
-            <mvc:exclude-mapping path="/passwordEmail"/>
-            <mvc:exclude-mapping path="/showWxChannelListJson"/>
-            <mvc:exclude-mapping path="/getQrCode"/>
-            <mvc:exclude-mapping path="/video/**"/>
-            <mvc:exclude-mapping path="/group/**"/>
-            <mvc:exclude-mapping path="/picture/**"/>
-            <mvc:exclude-mapping path="/property/**"/>
-            <mvc:exclude-mapping path="/api/**"/>
-            <mvc:exclude-mapping path="/enterprise/**"/>
+            <!-- <mvc:exclude-mapping path="/vendor/**"/> -->
             <!-- 自定义拦截控制器bean -->
             <bean class="com.hm.interceptor.LoginInterceptor"></bean>  
         </mvc:interceptor>  

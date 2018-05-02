@@ -83,20 +83,25 @@
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> AMG用车记录<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="flot.html">市场活动用车车单</a>
+                                    <a href="#">市场活动用车车单</a>
                                 </li>
                                 <li>
-                                    <a href="morris.html">车辆零部件</a>
+                                    <a href="#">车辆零部件</a>
                                 </li>
                                 <li>
-                                    <a href="morris.html">AMG精品</a>
+                                    <a href="#">AMG精品</a>
                                 </li>
                                 <li>
-                                    <a href="morris.html">AMG物料</a>
+                                    <a href="#">AMG物料</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <c:if test="${sessionScope.euserPassport.type==1}">
+                        	<li>
+                            	<a href="${ctx}/enterprise/index"><i class="fa fa-sitemap fa-fw"></i> 企业用户管理</a>
+                        	</li>
+                        </c:if>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

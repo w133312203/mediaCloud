@@ -106,7 +106,8 @@
 	                	<div id="toolbar">
            					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" onclick="openUpload()">上传图片</button>
            					 <button type="button" class="btn btn-primary" onclick="window.location.href='${ctx}/property/index/${group.id}/0'">添加属性</button>
-           					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delModal" onclick="batch_delete()" id="btn_delete">批量删除</button>
+           					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="batch_edit()" id="btn_edit" disabled="disabled">批量分组</button>
+           					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delModal" onclick="batch_delete()" id="btn_delete" disabled="disabled">批量删除</button>
            				</div>
            				<table id="table"
 				               data-toggle="table"
@@ -162,7 +163,7 @@
 		<script type="text/javascript" src="${ctx}/vendor/webuploader/js/webuploader.js"></script>
 		
 		<!--引入JS-->
-		<script type="text/javascript" src="${ctx}/dist/js/pictureUpload.js"></script>
+		<script type="text/javascript" src="${ctx}/dist/js/pictureUpload.js?v=1.0"></script>
         
         <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
        		<div class="modal-dialog" style="width:800px">
@@ -286,7 +287,7 @@
                    	<div class="modal-body">
                     	<div class="container-fluid">
                     		<form action="${ctx}/picture/edit" id="editForm" method="post">
-                    			<input type="hidden" name="id" />
+                    			<input type="hidden" name="pictureId" />
 	                       		<input type="hidden" name="groupId" />
 	                      		<div class="row">
 	                       			<div class="form-group">
@@ -399,26 +400,32 @@
 	<script type="text/javascript">
 		var $table = $('#table'),
 			$deleteButton = $('#btn_delete');
+			$editButton = $('#btn_edit');
 		
 		$table.bootstrapTable({
 			onCheck: function() {
         		checkboxLeg = $("input[name='btSelectItem']:checked").length;
 		        if(checkboxLeg>0) {
 	        		$deleteButton.removeAttr('disabled');
+	        		$editButton.removeAttr('disabled');
 	        	}else {
 	        		$deleteButton.attr('disabled','disabled');
+	        		$editButton.attr('disabled','disabled');
 	        	}
         	},
         	onUncheck: function() {
         		checkboxLeg = $("input[name='btSelectItem']:checked").length;
 		        if(checkboxLeg>0) {
 	        		$deleteButton.removeAttr('disabled');
+	        		$editButton.removeAttr('disabled');
 	        	}else {
 	        		$deleteButton.attr('disabled','disabled');
+	        		$editButton.attr('disabled','disabled');
 	        	}
         	},
         	onCheckAll: function() {
         		$deleteButton.removeAttr('disabled');
+        		$editButton.removeAttr('disabled');
         	},
         	onUncheckAll: function() {
         		$deleteButton.attr('disabled','disabled');
@@ -493,7 +500,7 @@
     	
     	function editPicture(id, propertyId, groupId, groupTitle) {
     		
-    		$("#editForm [name='id']").val(id);
+    		$("#editForm [name='pictureId']").val(id);
     		$("#editForm [name='groupId']").val(groupId);
     		if(propertyId==null||propertyId=="undefined") {
     			$("#edit_property").find("option").eq(0).attr("selected",true);
@@ -539,6 +546,18 @@
 		    	picStr.push(picture[i].id);
 		    }
 		    $("#delForm [name='id']").val(picStr.join());
+		}
+		
+		function batch_edit() {
+			$("#editForm [name='groupId']").val(${group.id});
+			var picture = $table.bootstrapTable('getSelections');
+			var picStr = [];
+			for(var i=0;i<picture.length;i++) {
+		    	picStr.push(picture[i].id);
+		    }
+		    $("#editForm [name='pictureId']").val(picStr.join());
+		    $("#edit_group_title").text("未分组");
+		    $("#edit_property").find("option").eq(0).attr("selected",true);
 		}
 	    
 	</script>

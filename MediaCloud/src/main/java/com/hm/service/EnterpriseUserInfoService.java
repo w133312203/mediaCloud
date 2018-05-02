@@ -17,4 +17,10 @@ public interface EnterpriseUserInfoService extends BaseService<EnterpriseUserInf
 	 */
 	public EnterpriseUserInfo updateLastLoginTime(Integer passportId);
 	
+	/**
+	 * 根据passportId删除账户
+	 * @param passportId
+	 */
+	public void deleteByPassportId(Integer passportId);
+	
 }

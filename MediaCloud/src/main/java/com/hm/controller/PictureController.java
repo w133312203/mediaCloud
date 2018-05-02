@@ -189,17 +189,23 @@ public class PictureController extends BaseCotroller{
   	
   	//编辑图片信息
 	@RequestMapping("/edit")
-	public ModelAndView edit(Picture picture) {
+	public ModelAndView edit(Picture picture, String pictureId) {
 		ModelAndView mv = new ModelAndView();
-		if(picture.getId()!=null) {
-			Picture oldPicture = pictureService.findById(picture.getId());
-			if(oldPicture!=null) {
-				oldPicture.setGroupId(picture.getGroupId());
-				oldPicture.setPropertyId(picture.getPropertyId());
-				pictureService.update(oldPicture);
-				mv.setViewName("redirect:/picture/index/"+oldPicture.getGroupId());
+		if(!StringUtil.isEmpty(pictureId)) {
+			pictureId = pictureId.trim().replace(" ", "");
+			if(pictureId.indexOf(",")!=-1) {
+				pictureService.updateByArrayId(picture.getGroupId(), picture.getPropertyId(), pictureId.split(","));
+				mv.setViewName("redirect:/picture/index/"+picture.getGroupId());
 			}else {
-				mv.setViewName(ApplicationUtil.JSP_URL+"error");
+				Picture oldPicture = pictureService.findById(Integer.parseInt(pictureId));
+				if(oldPicture!=null) {
+					oldPicture.setGroupId(picture.getGroupId());
+					oldPicture.setPropertyId(picture.getPropertyId());
+					pictureService.update(oldPicture);
+					mv.setViewName("redirect:/picture/index/"+oldPicture.getGroupId());
+				}else {
+					mv.setViewName(ApplicationUtil.JSP_URL+"error");
+				}
 			}
 		}else {
 			mv.setViewName(ApplicationUtil.JSP_URL+"error");

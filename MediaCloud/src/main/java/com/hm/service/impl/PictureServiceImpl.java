@@ -51,6 +51,11 @@ public class PictureServiceImpl implements PictureService{
 	public void deleteByArrayId(String[] idArray) {
 		pictureDao.deleteByArrayId(idArray);
 	}
+
+	@Override
+	public void updateByArrayId(Integer groupId, Integer propertyId, String[] idArray) {
+		pictureDao.updateByArrayId(groupId, propertyId, idArray);
+	}
 	
 	@Override
 	public void updateUpGroup(Integer oldGroupId, Integer newGroupId) {

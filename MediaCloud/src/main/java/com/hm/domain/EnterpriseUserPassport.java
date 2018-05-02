@@ -15,9 +15,9 @@ public class EnterpriseUserPassport {
 	
 	private String password;//密码
 	
-	private Integer activatEmail=0;//邮箱是否激活 0 未激活 1 激活
+	private Integer activatEmail = 0;//邮箱是否激活 0 未激活 1 激活
 	
-	private Integer activatMobileNum=0;//手机是否激活 0 未激活 1 激活
+	private Integer activatMobileNum = 0;//手机是否激活 0 未激活 1 激活
 	
 	private Integer roleId;//角色关联字段
 	
@@ -25,7 +25,9 @@ public class EnterpriseUserPassport {
 	
 	private Date expirationTime;//账户过期时间
 	
-	private Integer status;//0 禁用 1 启用
+	private Integer status = 1;//0 禁用 1 启用
+	
+	private Integer type = 0;//0 普通账户 1 超级管理员
 	
 	public Integer getId() {
 		return id;
@@ -105,6 +107,14 @@ public class EnterpriseUserPassport {
 
 	public void setActivatMobileNum(Integer activatMobileNum) {
 		this.activatMobileNum = activatMobileNum;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 }

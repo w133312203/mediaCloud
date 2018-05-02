@@ -29,6 +29,9 @@
 	    	.groupTitle {
 	    		margin-top: -10px;
 	    	}
+	    	.alertSpan {
+	    		display: none;
+	    	}
 	    </style>
 	    
 	</head>
@@ -51,7 +54,7 @@
             	<div class="row">
 	                <div class="col-lg-12">
 	                	<div id="toolbar">
-           					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPropertyModal" onclick="add()">添加用户</button>
+           					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" onclick="add()">添加用户</button>
            				</div>
            				<table id="table"
 				               data-toggle="table"
@@ -73,6 +76,8 @@
 				                <th data-field="mobileNum">电话</th>
 				                <th data-field="companyName">公司</th>
 				                <th data-field="position">职位</th>
+				                <th data-field="status" data-formatter="statusFormatter">账户状态</th>
+				                <th data-field="lastLoginTime">最后登陆时间</th>
 				                <th data-formatter="operateFormatter">操作</th>
 				            </tr>
 				            </thead>
@@ -112,7 +117,7 @@
                    	<div class="modal-body">
                     	<div class="container-fluid">
                       		<div class="row">
-                      			<form action="${ctx}/enterprise/edit" id="editForm">
+                      			<form action="${ctx}/enterprise/edit" id="editForm" method="post">
                       				<input type="hidden" name="id" id="id" />
 	                       			<div class="form-group">
 	                                	<label>姓名：</label>
@@ -120,8 +125,9 @@
 	                                </div>
 	                                <div class="form-group">
 	                                	<label>邮箱：</label>
-	                                	<span class="alertSpan" id="alertEmail1" value="" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="邮箱格式不正确，请填写正确格式的邮箱。例如：biz@ehui.net" ></span>
+	                                	<span class="alertSpan" id="alertEmail1" value="" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="邮箱格式不正确，请填写正确格式的邮箱。例如：w1333@qq.com" ></span>
 		                        		<span class="alertSpan" id="alertEmail2" value="" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="邮箱已经存在，请尝试其他的邮箱" ></span>
+		                        		<span class="alertSpan" id="alertEmail3" value="" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="邮箱和手机必须添加一项" ></span>
 	                                   	<input class="form-control" placeholder="邮箱" id="email" name="email" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="邮箱未填写">
 	                                </div>
 	                                <div class="form-group">
@@ -140,7 +146,16 @@
 	                                </div>
 	                                <div class="form-group">
 	                                	<label>密码：</label>
-	                                   	<input class="form-control" placeholder="密码" id="password" name="password" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="密码未填写">
+	                                   	<input class="form-control" type="password" placeholder="密码" id="password" name="password" data-container="body" tabindex="0" role="button"  data-toggle="popover" data-trigger="focus" data-placement="top" data-content="密码未填写">
+	                                </div>
+	                                <div class="form-group">
+	                                	<label>用户类型：</label><br/>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="type" value="0" checked="checked">普通用户
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="type" value="1">超级管理员
+                                        </label>
 	                                </div>
                                 </form>
                       		</div>
@@ -201,17 +216,28 @@
         	$('#companyName').val("");
         	$('#position').val("");
         	$('#password').val("");
+        	$("[name='type'][value='0']").prop("checked", "checked");
 	    }
 	    
-	    function edit(row) {
+	    function edit(index) {
+	    	var data = $table.bootstrapTable('getData');
 	    	$('#myModalLabel').text('编辑用户');
-        	$('#realName').val(row.realName);
-        	$("#id").val(row.id);
-        	$('#email').val(row.email);
-        	$('#mobileNum').val(row.mobileNum);
-        	$('#companyName').val(row.companyName);
-        	$('#position').val(row.position);
-        	$('#password').val(row.password);
+        	$('#realName').val(data[index].realName);
+        	$("#id").val(data[index].id);
+        	$('#email').val(data[index].email);
+        	$('#mobileNum').val(data[index].mobileNum);
+        	$('#companyName').val(data[index].companyName);
+        	$('#position').val(data[index].position);
+        	$('#password').val(data[index].password);
+        	if(data[index].type==""||data[index].type==undefined) {
+	    		$("[name='type'][value='0']").prop("checked", "checked");
+	    	}else {
+	    		$("[name='type'][value='"+data[index].type+"']").prop("checked", "checked");
+	    	}
+	    }
+	    
+	    function changeStatus(id) {
+	    	window.location.href='${ctx}/enterprise/changeStatus?id='+id;
 	    }
 	    
 	    function del(id) {
@@ -221,15 +247,115 @@
 	    }
     	
     	function operateFormatter(value, row, index) {
-    		return [
-    	            '<a href="#" style="margin-right: 10px;" data-toggle="modal" data-target="#addModal" onclick="edit(\''+row+'\')">',
+    		if(row.status==0) {
+    			return [
+    	            '<a href="#" style="margin-right: 10px;" data-toggle="modal" data-target="#addModal" onclick="edit(\''+index+'\')">',
     	                '编辑',
     	            '</a>',
-    	            '<a href="#" data-toggle="modal" data-target="#delModal" onclick="del(\''+row.id+'\')">',
+    	            '<a href="javascript:void(0)" style="margin-right: 10px;" onclick="changeStatus(\''+row.id+'\')">',
+    	                '启用',
+    	            '</a>',
+    	            '<a href="javascript:void(0)" data-toggle="modal" data-target="#delModal" onclick="del(\''+row.id+'\')">',
     	                '删除',
     	            '</a>'
     	        ].join('');
-    	}       
+    		}else {
+    			return [
+    	            '<a href="#" style="margin-right: 10px;" data-toggle="modal" data-target="#addModal" onclick="edit(\''+index+'\')">',
+    	                '编辑',
+    	            '</a>',
+    	            '<a href="javascript:void(0)" style="margin-right: 10px;" onclick="changeStatus(\''+row.id+'\')">',
+    	                '禁用',
+    	            '</a>',
+    	            '<a href="javascript:void(0)" data-toggle="modal" data-target="#delModal" onclick="del(\''+row.id+'\')">',
+    	                '删除',
+    	            '</a>'
+    	        ].join('');
+    		}
+    	}
+    	
+    	function statusFormatter(value) {
+    		if(value==0) {
+    			return '禁用';
+    		}else {
+    			return '正常';
+    		}
+    	}     
+    	
+    	function submit() {
+    		var id = $("#id").val();
+	    	var email = $("#email").val();
+	    	var mobileNum = $("#mobileNum").val();
+	    	var password = $("#password").val();
+	    	var isemail = /^\w+([-\.]\w+)*@\w+([\.-]\w+)*\.\w{2,4}$/;
+	    	var ismobile = /^(13[0-9]\d{8}|15[0-9]\d{8}|18[0-9]\d{8}|14[0-9]\d{8}|17[0-9]\d{8})$/;
+	    	
+	    	if(email==''&&mobileNum==''){
+	    		$(".alertSpan").hide();
+	    		$("#alertEmail3").css("display","block");
+				$("#alertEmail3").focus();
+				return;
+	    	}
+	    	
+	    	if(!isemail.test(email)) {
+	    		$(".alertSpan").hide();
+				$("#alertEmail1").css("display","block");
+				$("#alertEmail1").focus();
+				return;
+	    	}
+	    	
+	    	$.ajax({
+           		type: "GET",
+           		url: "${ctx}/enterprise/checkPassport",
+           		data: {passport:email,id:id,type:0},
+           		dataType: "json",
+           		success: function(data){
+        			var msg = eval(data);
+           			if(msg.CODE=='10001') {
+           				if(!ismobile.test(mobileNum)) {
+	    					$(".alertSpan").hide();
+	    					$("#alertMobile1").css("display","block");
+							$("#alertMobile1").focus();
+							return;
+	    				}
+	    				
+	    				$.ajax({
+			           		type: "GET",
+			           		url: "${ctx}/enterprise/checkPassport",
+			           		data: {passport:mobileNum,id:id,type:1},
+			           		dataType: "json",
+			           		success: function(data){
+			        			var msg = eval(data);
+			           			if(msg.CODE=='10001') {
+			           			
+				    				if(id==""&&password=="") {
+				    					$("#password").focus();
+				    					return;
+				    				}
+				    				
+				    				
+				    				$("#editForm").submit();
+				    				
+			           			}else if(msg.CODE=='-200'){
+			           				$(".alertSpan").hide();
+				    				$("#alertMobile2").css("display","block");
+									$("#alertMobile2").focus();
+			           			}else {
+			           				alert("EXCEPTION");
+			           			}
+			           		}
+			       		});
+	    				
+           			}else if(msg.CODE=='-200'){
+           				$(".alertSpan").hide();
+	    				$("#alertEmail2").css("display","block");
+						$("#alertEmail2").focus();
+           			}else {
+           				alert("EXCEPTION");
+           			}
+           		}
+       		});
+	    }     
 	    
 	</script>
 </html>

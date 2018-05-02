@@ -1,5 +1,6 @@
 package com.hm.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,29 @@ public class EnterpriseUserPassportServiceImpl implements EnterpriseUserPassport
 	public EnterpriseUserPassport findById(Integer Id) {
 		return euserPassportDao.findById(Id);
 	}	
+	
+	@Override
+	public List<Map> list(String search, Integer first, Integer max) {
+		return euserPassportDao.list(search, first, max);
+	}
+	
+	@Override
+	public Integer count(String search) {
+		return euserPassportDao.count(search);
+	}
 
+	@Override
+	public List<EnterpriseUserPassport> checkEmail(String email, Integer id) {
+		return euserPassportDao.checkEmail(email, id);
+	}
+
+	@Override
+	public List<EnterpriseUserPassport> checkMobileNum(String mobileNum, Integer id) {
+		return euserPassportDao.checkMobileNum(mobileNum, id);
+	}
+
+	@Override
+	public void updateStatus(Integer status, Integer id) {
+		euserPassportDao.updateStatus(status, id);
+	}
 }

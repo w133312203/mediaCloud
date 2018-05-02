@@ -76,4 +76,12 @@
 		);
 	</select>
 	
+	<update id="updateByArrayId">
+		update hm_picture set groupId = #{groupId},propertyId = #{propertyId} where id in (
+		<foreach collection="array" item="item" separator=",">
+			#{item}
+		</foreach>
+		);
+	</update>
+	
 </mapper>

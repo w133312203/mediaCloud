@@ -1,6 +1,7 @@
 package com.hm.controller;  
   
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,9 @@ public class LoginController extends BaseCotroller{
     @RequestMapping("/login")
   	public ModelAndView login() {
     	if(getSessionPassport()!=null) {
+    		EnterpriseUserInfo ui = euserInfoService.findEnterpriseUserInfoByPassportId(getSessionPassport().getId());
+    		ui.setLastLoginTime(new Date());
+    		euserInfoService.update(ui);
     		return new ModelAndView("redirect:/picture/index/1");
 		}else {
 			return new ModelAndView("/login/login");
@@ -46,7 +50,8 @@ public class LoginController extends BaseCotroller{
     @ResponseBody
     @RequestMapping("/logout")
     public ModelAndView logout(HttpSession httpSession, HttpServletResponse response) {
-    	httpSession.invalidate();
+    	request.getSession().invalidate();
+    	request.getSession().removeAttribute("euserPassport");
     	try {
     		response.sendRedirect("redirect:/login");
 		} catch (IOException e) {

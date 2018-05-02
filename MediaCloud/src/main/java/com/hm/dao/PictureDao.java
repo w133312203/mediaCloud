@@ -29,6 +29,12 @@ public interface PictureDao extends BaseDao<Picture>{
 	void deleteByArrayId(String[] idArray);
 	
 	/**
+	 * 按Id数组编辑
+	 * @param id 图片id数组
+	 */
+	void updateByArrayId(@Param("groupId")Integer groupId, @Param("propertyId")Integer propertyId, @Param("array")String[] idArray);
+	
+	/**
 	 * 批量更新分组
 	 * @param oldGroupId 老分组
 	 * @param newGroupId 新分组
