@@ -78,6 +78,7 @@
 				                <th data-field="position">职位</th>
 				                <th data-field="status" data-formatter="statusFormatter">账户状态</th>
 				                <th data-field="lastLoginTime">最后登陆时间</th>
+				                <th data-field="type" data-formatter="typeFormatter">账户类型</th>
 				                <th data-formatter="operateFormatter">操作</th>
 				            </tr>
 				            </thead>
@@ -280,12 +281,22 @@
     		}else {
     			return '正常';
     		}
+    	}    
+    	
+    	function typeFormatter(value) {
+    		if(value==0) {
+    			return '普通用户';
+    		}else {
+    			return '超级管理员';
+    		}
     	}     
     	
     	function submit() {
     		var id = $("#id").val();
 	    	var email = $("#email").val();
+	    	email = $.trim(email);
 	    	var mobileNum = $("#mobileNum").val();
+	    	mobileNum = $.trim(mobileNum);
 	    	var password = $("#password").val();
 	    	var isemail = /^\w+([-\.]\w+)*@\w+([\.-]\w+)*\.\w{2,4}$/;
 	    	var ismobile = /^(13[0-9]\d{8}|15[0-9]\d{8}|18[0-9]\d{8}|14[0-9]\d{8}|17[0-9]\d{8})$/;
@@ -297,64 +308,117 @@
 				return;
 	    	}
 	    	
-	    	if(!isemail.test(email)) {
+	    	if(email!=''&&!isemail.test(email)) {
 	    		$(".alertSpan").hide();
 				$("#alertEmail1").css("display","block");
 				$("#alertEmail1").focus();
 				return;
 	    	}
 	    	
-	    	$.ajax({
-           		type: "GET",
-           		url: "${ctx}/enterprise/checkPassport",
-           		data: {passport:email,id:id,type:0},
-           		dataType: "json",
-           		success: function(data){
-        			var msg = eval(data);
-           			if(msg.CODE=='10001') {
-           				if(!ismobile.test(mobileNum)) {
-	    					$(".alertSpan").hide();
-	    					$("#alertMobile1").css("display","block");
-							$("#alertMobile1").focus();
-							return;
-	    				}
-	    				
-	    				$.ajax({
-			           		type: "GET",
-			           		url: "${ctx}/enterprise/checkPassport",
-			           		data: {passport:mobileNum,id:id,type:1},
-			           		dataType: "json",
-			           		success: function(data){
-			        			var msg = eval(data);
-			           			if(msg.CODE=='10001') {
-			           			
-				    				if(id==""&&password=="") {
-				    					$("#password").focus();
-				    					return;
-				    				}
-				    				
-				    				
-				    				$("#editForm").submit();
-				    				
-			           			}else if(msg.CODE=='-200'){
-			           				$(".alertSpan").hide();
-				    				$("#alertMobile2").css("display","block");
-									$("#alertMobile2").focus();
-			           			}else {
-			           				alert("EXCEPTION");
-			           			}
-			           		}
-			       		});
-	    				
-           			}else if(msg.CODE=='-200'){
-           				$(".alertSpan").hide();
-	    				$("#alertEmail2").css("display","block");
-						$("#alertEmail2").focus();
-           			}else {
-           				alert("EXCEPTION");
-           			}
-           		}
-       		});
+	    	if(email!=''&&mobileNum=='') {
+	    		$.ajax({
+	           		type: "GET",
+	           		url: "${ctx}/enterprise/checkPassport",
+	           		data: {passport:email,id:id,type:0},
+	           		dataType: "json",
+	           		success: function(data){
+	        			var msg = eval(data);
+	           			if(msg.CODE=='10001') {
+		    				if(id==""&&password=="") {
+					    		$("#password").focus();
+					    		return;
+					    	}
+					    	$("#editForm").submit();
+	           			}else if(msg.CODE=='-200'){
+	           				$(".alertSpan").hide();
+		    				$("#alertEmail2").css("display","block");
+							$("#alertEmail2").focus();
+	           			}else {
+	           				alert("EXCEPTION");
+	           			}
+	           		}
+	       		});
+	    	}
+	    	
+	    	if(mobileNum!=''&&email=='') {
+	    		$.ajax({
+		           		type: "GET",
+		           		url: "${ctx}/enterprise/checkPassport",
+		           		data: {passport:mobileNum,id:id,type:1},
+		           		dataType: "json",
+		           		success: function(data){
+		        			var msg = eval(data);
+		           			if(msg.CODE=='10001') {
+			    				if(id==""&&password=="") {
+			    					$("#password").focus();
+			    					return;
+			    				}
+			    				$("#editForm").submit();
+		           			}else if(msg.CODE=='-200'){
+		           				$(".alertSpan").hide();
+			    				$("#alertMobile2").css("display","block");
+								$("#alertMobile2").focus();
+		           			}else {
+		           				alert("EXCEPTION");
+		           			}
+		           		}
+		       		});
+	    	}
+	    	
+	    	if(email!=''&&mobileNum!=''){
+	    		$.ajax({
+	           		type: "GET",
+	           		url: "${ctx}/enterprise/checkPassport",
+	           		data: {passport:email,id:id,type:0},
+	           		dataType: "json",
+	           		success: function(data){
+	        			var msg = eval(data);
+	           			if(msg.CODE=='10001') {
+	           				if(mobileNum!=''&&!ismobile.test(mobileNum)) {
+		    					$(".alertSpan").hide();
+		    					$("#alertMobile1").css("display","block");
+								$("#alertMobile1").focus();
+								return;
+		    				}
+		    				
+		    				$.ajax({
+				           		type: "GET",
+				           		url: "${ctx}/enterprise/checkPassport",
+				           		data: {passport:mobileNum,id:id,type:1},
+				           		dataType: "json",
+				           		success: function(data){
+				        			var msg = eval(data);
+				           			if(msg.CODE=='10001') {
+				           			
+					    				if(id==""&&password=="") {
+					    					$("#password").focus();
+					    					return;
+					    				}
+					    				
+					    				
+					    				$("#editForm").submit();
+					    				
+				           			}else if(msg.CODE=='-200'){
+				           				$(".alertSpan").hide();
+					    				$("#alertMobile2").css("display","block");
+										$("#alertMobile2").focus();
+				           			}else {
+				           				alert("EXCEPTION");
+				           			}
+				           		}
+				       		});
+		    				
+	           			}else if(msg.CODE=='-200'){
+	           				$(".alertSpan").hide();
+		    				$("#alertEmail2").css("display","block");
+							$("#alertEmail2").focus();
+	           			}else {
+	           				alert("EXCEPTION");
+	           			}
+	           		}
+	       		});
+	    	}
+	    	
 	    }     
 	    
 	</script>

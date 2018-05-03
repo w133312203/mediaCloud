@@ -99,7 +99,7 @@
                         </li>
                         <c:if test="${sessionScope.euserPassport.type==1}">
                         	<li>
-                            	<a href="${ctx}/enterprise/index"><i class="fa fa-sitemap fa-fw"></i> 企业用户管理</a>
+                            	<a href="${ctx}/enterprise/index"><i class="fa fa-users fa-fw"></i> 企业用户管理</a>
                         	</li>
                         </c:if>
                     </ul>

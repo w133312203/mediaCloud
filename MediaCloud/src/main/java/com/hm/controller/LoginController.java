@@ -50,15 +50,8 @@ public class LoginController extends BaseCotroller{
     @ResponseBody
     @RequestMapping("/logout")
     public ModelAndView logout(HttpSession httpSession, HttpServletResponse response) {
-    	request.getSession().invalidate();
-    	request.getSession().removeAttribute("euserPassport");
-    	try {
-    		response.sendRedirect("redirect:/login");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return null;
+    	httpSession.invalidate();
+    	return new ModelAndView("redirect:/login");
     }
     
     //查找企业用户是否存在

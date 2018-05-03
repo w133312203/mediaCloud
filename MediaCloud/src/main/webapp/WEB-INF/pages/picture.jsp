@@ -133,6 +133,18 @@
 				            </tr>
 				            </thead>
 				        </table>
+				        <li style="display: none">
+                  			<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#333;text-decoration:none;width: 100%;display: block;">
+                  				<span id="search_group_title">选择分组</span> <i class="fa fa-caret-down"></i>
+                  			</a>
+                  			<ul class="dropdown-menu" id="search_group_list">
+                  				<li>
+                  					<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >选择分组</a>
+                  				</li>
+                  				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
+                  				<c:import url="t.jsp"></c:import>
+                  			</ul>
+                  		</li>
 				        <div id="filePicker" style="display: none"></div>
        				 </div>
 	                <!-- /.col-lg-12 -->
@@ -188,49 +200,10 @@
 	                            			</a>
 	                            			<ul class="dropdown-menu" id="upload_group_list">
 	                            				<li>
-	                            					<a href="javascript:void(0)" onclick="upload_select_group(this)" style="color:#262626" name="${group.id}" >未分组</a>
+	                            					<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >未分组</a>
 	                            				</li>
-	                            				<c:forEach var="g" items="${groupList}"> 
-	                            					<li>
-	                            						<c:if test="${g.groupList.size()==0}">
-	                            							<a href="javascript:void(0)" onclick="upload_select_group(this)" name="${g.id}" >${g.title}</a>
-	                            						</c:if>
-	                            						<c:if test="${g.groupList.size()>0}">
-	                            							<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" name="${g.id}" >${g.title}<span class="fa arrow"></span></a>
-	                            						</c:if>
-	                            						<ul class="nav nav-second-level">
-	                            							<c:forEach var="g1" items="${g.groupList}"> 
-	                            								<li>
-	                               									<c:if test="${g1.groupList.size()==0}">
-	                               										<a href="javascript:void(0)" onclick="upload_select_group(this)" style="padding: 3px 20px 3px 35px;color:#262626" name="${g1.id}" >${g1.title}</a>
-	                               									</c:if>
-	                               									<c:if test="${g1.groupList.size()>0}">
-	                               										<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" style="padding: 3px 20px 3px 35px;color:#262626" name="${g1.id}" >${g1.title}<span class="fa arrow"></span></a>
-	                               									</c:if>
-	                               									<ul class="nav nav-third-level">
-	                               										<c:forEach var="g2" items="${g1.groupList}"> 
-	                            											<li>
-	                            												<c:if test="${g2.groupList.size()==0}">
-					                               									<a href="javascript:void(0)" onclick="upload_select_group(this)" style="padding: 3px 20px 3px 50px;color:#262626" name="${g2.id}" >${g2.title}</a>
-					                               								</c:if>
-					                               								<c:if test="${g2.groupList.size()>0}">
-					                               									<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" style="padding: 3px 20px 3px 50px;color:#262626" name="${g2.id}" >${g2.title}<span class="fa arrow"></span></a>
-					                               								</c:if>
-	                                  											<ul class="nav nav-third-level">
-	                                  												<c:forEach var="g3" items="${g2.groupList}"> 
-	                                  													<li>
-			                                   												<a href="javascript:void(0)" onclick="upload_select_group(this)" style="padding: 3px 20px 3px 65px;color:#262626" name="${g3.id}" >${g3.title}</a>
-			                                   											</li>
-	                                  												</c:forEach>
-	                                  											</ul>
-	                                  										</li>
-	                               										</c:forEach>
-	                               									</ul>
-	                               								</li>
-	                            							</c:forEach>
-	                            						</ul>
-	                            					</li>
-	                            				</c:forEach>
+	                            				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
+	                            				<c:import url="t.jsp"></c:import>
 	                            			</ul>
 	                            		</li>
 	                                </div>
@@ -298,49 +271,10 @@
 	                            			</a>
 	                            			<ul class="dropdown-menu" id="edit_group_list">
 	                            				<li>
-	                            					<a href="javascript:void(0)" onclick="edit_select_group(this)" style="color:#262626" name="${group.id}" >未分组</a>
+	                            					<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >未分组</a>
 	                            				</li>
-	                            				<c:forEach var="g" items="${groupList}"> 
-	                            					<li>
-	                            						<c:if test="${g.groupList.size()==0}">
-	                            							<a href="javascript:void(0)" onclick="edit_select_group(this)" name="${g.id}" >${g.title}</a>
-	                            						</c:if>
-	                            						<c:if test="${g.groupList.size()>0}">
-	                            							<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" name="${g.id}" >${g.title}<span class="fa arrow"></span></a>
-	                            						</c:if>
-	                            						<ul class="nav nav-second-level">
-	                            							<c:forEach var="g1" items="${g.groupList}"> 
-	                            								<li>
-	                               									<c:if test="${g1.groupList.size()==0}">
-	                               										<a href="javascript:void(0)" onclick="edit_select_group(this)" style="padding: 3px 20px 3px 35px;color:#262626" name="${g1.id}" >${g1.title}</a>
-	                               									</c:if>
-	                               									<c:if test="${g1.groupList.size()>0}">
-	                               										<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" style="padding: 3px 20px 3px 35px;color:#262626" name="${g1.id}" >${g1.title}<span class="fa arrow"></span></a>
-	                               									</c:if>
-	                               									<ul class="nav nav-third-level">
-	                               										<c:forEach var="g2" items="${g1.groupList}"> 
-	                            											<li>
-	                                  											<c:if test="${g2.groupList.size()==0}">
-					                               									<a href="javascript:void(0)" onclick="edit_select_group(this)" style="padding: 3px 20px 3px 50px;color:#262626" name="${g2.id}" >${g2.title}</a>
-					                               								</c:if>
-					                               								<c:if test="${g2.groupList.size()>0}">
-					                               									<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" style="padding: 3px 20px 3px 50px;color:#262626" name="${g2.id}" >${g2.title}<span class="fa arrow"></span></a>
-					                               								</c:if>
-	                                  											<ul class="nav nav-third-level">
-	                                  												<c:forEach var="g3" items="${g2.groupList}"> 
-	                                  													<li>
-			                                   												<a href="javascript:void(0)" onclick="edit_select_group(this)" style="padding: 3px 20px 3px 65px;color:#262626" name="${g3.id}" >${g3.title}</a>
-			                                   											</li>
-	                                  												</c:forEach>
-	                                  											</ul>
-	                                  										</li>
-	                               										</c:forEach>
-	                               									</ul>
-	                               								</li>
-	                            							</c:forEach>
-	                            						</ul>
-	                            					</li>
-	                            				</c:forEach>
+	                            				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
+	                            				<c:import url="t.jsp"></c:import>
 	                            			</ul>
 	                            		</li>
 	                                </div>
@@ -433,6 +367,46 @@
         	}
 		});
 		
+		
+		
+		var propertyHtml = "";
+	    $("#edit_property option").each(function() {
+	    	if($(this).val()!='') {
+	       		propertyHtml = propertyHtml+"<option value=\""+$(this).val()+"\">"+$(this).text()+"</option>";
+	        }
+	    });
+	    
+	    if(propertyHtml!='') {
+	     	$(".fixed-table-toolbar").append("<div style=\"position: relative;margin: 10px 0px 10px 5px;line-height: 34px;float: right;width:150px\"><select id=\"searchGroup\" class=\"form-control\" ><option value=\"\">选择属性</option>"+propertyHtml+"</select></div>");
+	    }
+		
+		
+		$(".fixed-table-toolbar").append("<div style=\"position: relative;margin: 10px 0px;line-height: 1.42857143;float: right;width:150px\"><li class='dropdown groupList' >"+$("#search_group_title").parent().parent().html()+"</li></div>");
+		
+		$("#search_group_list").find("a").eq(0).click(function(e){
+    		$("#search_group_title").text($(this).text());
+    		var propertyId = $("#searchGroup").
+    		$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}'});
+		});
+		
+		$("#search_group_list").find("a").each(function(index,e) {
+			if(index>0) {
+				var str = $(this).attr("data-stopPropagation");
+				if(str=="true"){
+					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+        				e.stopPropagation();  
+    				});  
+				}else {
+					$(this).click(function(){
+    					$("#search_group_title").text($(this).text());
+    					var groupId = $(this).attr("name");
+    					$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}&groupId='+groupId});
+					});
+				}
+			}
+		});
+		
+		
 		$("#delBtn").click(function(){
 	    	$("#delForm").submit();
 	    });
@@ -514,26 +488,48 @@
     	function delPicture(id) {
 	    	$("#delForm [name='id']").val(id);
 	    }
-    	
-    	function noClose() {
-    		$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
-        		e.stopPropagation();  
-    		});  
-    	}
-    	
-    	function upload_select_group(obj) {
-			var groupId = $(obj).attr("name");
-    		var title = $(obj).text();
-    		$("#upload_groupId").val(groupId);
-    		$("#upload_group_title").text(title);
-		}
 		
-		function edit_select_group(obj) {
-			var groupId = $(obj).attr("name");
-    		var title = $(obj).text();
-    		$("#editForm [name='groupId']").val(groupId);
-    		$("#edit_group_title").text(title);
-		}
+		$("#upload_group_list").find("a").eq(0).click(function(e){
+    		$("#upload_groupId").val($(this).attr("name"));
+    		$("#upload_group_title").text($(this).text());
+		});
+		
+		$("#upload_group_list").find("a").each(function(index,e) {
+			if(index>0) {
+				var str = $(this).attr("data-stopPropagation");
+				if(str=="true"){
+					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+        				e.stopPropagation();  
+    				});  
+				}else {
+					$(this).click(function(){
+    					$("#upload_groupId").val($(this).attr("name"));
+    					$("#upload_group_title").text($(this).text());
+					});
+				}
+			}
+		});
+		
+		$("#edit_group_list").find("a").eq(0).click(function(e){
+    		$("#editForm [name='groupId']").val($(this).attr("name"));
+    		$("#edit_group_title").text($(this).text());
+		});
+		
+		$("#edit_group_list").find("a").each(function(index,e) {
+			if(index>0) {
+				var str = $(this).attr("data-stopPropagation");
+				if(str=="true"){
+					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+        				e.stopPropagation();  
+    				});  
+				}else {
+					$(this).click(function(){
+    					$("#editForm [name='groupId']").val($(this).attr("name"));
+    					$("#edit_group_title").text($(this).text());
+					});
+				}
+			}
+		});
 		
 		function submit() {
 			$("#editForm").submit();
