@@ -134,12 +134,12 @@
 				            </thead>
 				        </table>
 				        <li style="display: none">
-                  			<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#333;text-decoration:none;width: 100%;display: block;">
+                  			<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#333;text-decoration:none;width: 100%;display: block;" name="${group.id}">
                   				<span id="search_group_title">选择分组</span> <i class="fa fa-caret-down"></i>
                   			</a>
                   			<ul class="dropdown-menu" id="search_group_list">
                   				<li>
-                  					<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >选择分组</a>
+                  					<a href="javascript:void(0)" style="color:#262626" >选择分组</a>
                   				</li>
                   				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
                   				<c:import url="t.jsp"></c:import>
@@ -383,14 +383,14 @@
 		
 		$(".fixed-table-toolbar").append("<div style=\"position: relative;margin: 10px 0px;line-height: 1.42857143;float: right;width:150px\"><li class='dropdown groupList' >"+$("#search_group_title").parent().parent().html()+"</li></div>");
 		
-		$("#search_group_list").find("a").eq(0).click(function(e){
-    		$("#search_group_title").text($(this).text());
-    		var propertyId = $("#searchGroup").
-    		$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}'});
+		$("#searchGroup").change(function(){
+			var propertyId = $("#searchGroup").val();
+			var groupId = $("#search_group_list").prev().attr("name");
+			$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}&groupId='+groupId+'&propertyId='+propertyId});
 		});
 		
 		$("#search_group_list").find("a").each(function(index,e) {
-			if(index>0) {
+				
 				var str = $(this).attr("data-stopPropagation");
 				if(str=="true"){
 					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
@@ -400,10 +400,15 @@
 					$(this).click(function(){
     					$("#search_group_title").text($(this).text());
     					var groupId = $(this).attr("name");
-    					$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}&groupId='+groupId});
+    					if(index==0) {
+    						groupId = "";
+    					}
+    					$("#search_group_list").prev().attr("name",groupId);
+    					var propertyId = $("#searchGroup").val();
+    					$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}&groupId='+groupId+'&propertyId='+propertyId});
 					});
 				}
-			}
+			
 		});
 		
 		
