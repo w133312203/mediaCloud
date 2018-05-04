@@ -1,5 +1,6 @@
 package com.hm.controller;  
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +62,10 @@ public class PropertyController extends BaseCotroller{
 		}else{
 			search="%"+search+"%";
 		}
-		List<Property> groupList = propertyService.list(0, Integer.parseInt(groupId), Integer.parseInt(type), search, Integer.parseInt(offset), Integer.parseInt(maxresult));
+		List<Property> propertyList = propertyService.list(0, Integer.parseInt(groupId), Integer.parseInt(type), search, Integer.parseInt(offset), Integer.parseInt(maxresult));
 		Integer count = propertyService.count(0,  Integer.parseInt(groupId), Integer.parseInt(type), search);
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("rows", groupList); 
+		map.put("rows", propertyList); 
 		map.put("total", count);
 		return map;
 	}
@@ -113,6 +114,28 @@ public class PropertyController extends BaseCotroller{
     	}
     	return mv;
   	}
+    
+    //属性列表数据
+    @ResponseBody
+	@RequestMapping("/listByGroupId")
+	public Map<String,Object> listByGroupId() {
+		String groupId = request.getParameter("groupId");
+		String type = request.getParameter("type");
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(StringUtil.isNumber(type)) {
+			List<Property> propertyList = new ArrayList<Property>();
+			if(StringUtil.isNumber(groupId)) {
+				propertyList = propertyService.listAll(0, Integer.parseInt(groupId), Integer.parseInt(type));
+			}
+			map.put("list", propertyList); 
+			map.put("CODE", 10001);
+			map.put("MSG", "SUCCESS");
+		}else {
+			map.put("CODE", -200);
+			map.put("MSG", "PARAM IS NULL OR ERROR");
+		}
+		return map;
+	}
 	
   	
 }

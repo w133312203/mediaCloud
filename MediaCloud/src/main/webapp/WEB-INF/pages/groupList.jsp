@@ -33,7 +33,7 @@
 	    		</c:if>
 			</c:if>
 			<ul class="nav nav-second-level">
-	      		<c:import url="t.jsp"></c:import>
+	      		<c:import url="groupList.jsp"></c:import>
 	      	</ul>
 	     </li>
 	</c:forEach>

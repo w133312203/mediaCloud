@@ -55,7 +55,7 @@ public class VideoController extends BaseCotroller{
     		Group group = groupService.findUpGroupById(0, Integer.parseInt(groupId));
     		if(group!=null) {
     			List<Map> groupList = groupService.findGroupByType(0, group.getType(), 2);
-    	    	List<Property> propertyList = propertyService.listAll(0, Integer.parseInt(groupId), 1);
+    	    	//List<Property> propertyList = propertyService.listAll(0, Integer.parseInt(groupId), 1);
     	    	List<Map> newGroupList = new ArrayList<Map>();
     	    	Map groupMap = new HashMap();
     	    	for(Map map:groupList) {
@@ -89,7 +89,7 @@ public class VideoController extends BaseCotroller{
     	    	newGroupList = (List<Map>)newGroupList.get(0).get("groupList");
     	    	mv.addObject("group",group);
     	    	mv.addObject("groupList",newGroupList);
-    	    	mv.addObject("propertyList",propertyList);
+    	    	//mv.addObject("propertyList",propertyList);
     	    	mv.setViewName(ApplicationUtil.JSP_URL+"video");
     		}else {
     			mv.setViewName(ApplicationUtil.JSP_URL+"error");

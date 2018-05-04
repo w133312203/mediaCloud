@@ -44,10 +44,13 @@
 	    		color:#262626;
 	    		background-color: #eeeeee;
 	    	}
-	    	#eGroupList>.active>a, #eGroupList>.active>a:hover, #eGroupList>.active>a:focus {
+	    	
+	    	.groupList>ul>.active>a, .groupList>ul>.active>a:hover, .groupList>ul>.active>a:focus {
 	    		color:#262626;
 	    		background-color: #eeeeee;
 	    	}
+	    	
+	    	
 	    	.groupList {
 	    		border: 1px solid #ccc;
 			    border-radius: 4px;
@@ -107,6 +110,18 @@
 				            </tr>
 				            </thead>
 				        </table>
+				        <li style="display: none">
+                  			<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#333;text-decoration:none;width: 100%;display: block;" name="${group.id}">
+                  				<span id="search_group_title">选择分组</span> <i class="fa fa-caret-down"></i>
+                  			</a>
+                  			<ul class="dropdown-menu" id="search_group_list">
+                  				<li>
+                  					<a href="javascript:void(0)" style="color:#262626" >选择分组</a>
+                  				</li>
+                  				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
+                  				<c:import url="groupList.jsp"></c:import>
+                  			</ul>
+                  		</li>
        				 </div>
 	                <!-- /.col-lg-12 -->
 	            </div>
@@ -166,7 +181,7 @@
 							                <th data-field="title" data-width="170px" data-formatter="titleFormatter">视频标题</th>
 							                <th data-field="formats" data-width="65px">视频格式</th>
 							                <th data-field="size" data-width="100px">视频大小</th>
-							                <th data-field="groupId" data-width="170px" data-formatter="groupFormatter">分类</th>
+							                <th data-field="groupId" data-width="170px" data-formatter="groupFormatter" data-events="groupClick">分类</th>
 							                <th data-width="120px" data-formatter="voperateFormatter">操作</th>
 					            		</tr>
 					            	</thead>
@@ -194,6 +209,20 @@
 					            		</tr>
 					            	</thead>
 				        		</table>
+				        		<div style="position:absolute;display: none">
+    								<li class="dropdown" onclick="initMenu()" style="list-style-type:none">
+                    					<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#333;text-decoration:none">
+                        					<span id="gTitle">未分组</span> <i class="fa fa-caret-down"></i>
+                    					</a>
+                    					<ul class="dropdown-menu" id="selGroupList">
+                    						<li>
+	                    						<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >未分组</a>
+	                    					</li>
+	                    					<c:set var="gpList" value='${groupList}' scope="request"></c:set>
+	                            			<c:import url="groupList.jsp"></c:import>
+                    					</ul>
+                					</li>
+                				</div>
                       		</div>
                     	</div>
                    	</div>
@@ -243,49 +272,10 @@
 	                            			</a>
 	                            			<ul class="dropdown-menu" id="eGroupList">
 	                            				<li>
-	                            					<a href="javascript:void(0)" onclick="eSelectGroup(this)" style="color:#262626" name="${group.id}" >未分组</a>
+	                            					<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >未分组</a>
 	                            				</li>
-	                            				<c:forEach var="g" items="${groupList}"> 
-	                            					<li>
-	                            						<c:if test="${g.groupList.size()==0}">
-	                            							<a href="javascript:void(0)" onclick="eSelectGroup(this)" name="${g.id}" >${g.title}</a>
-	                            						</c:if>
-	                            						<c:if test="${g.groupList.size()>0}">
-	                            							<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" name="${g.id}" >${g.title}<span class="fa arrow"></span></a>
-	                            						</c:if>
-	                            						<ul class="nav nav-second-level">
-	                            							<c:forEach var="g1" items="${g.groupList}"> 
-	                            								<li>
-	                            									<c:if test="${g1.groupList.size()==0}">
-	                               										<a href="javascript:void(0)" onclick="eSelectGroup(this)" style="padding: 3px 20px 3px 35px;color:#262626" name="${g1.id}" >${g1.title}</a>
-	                               									</c:if>
-	                               									<c:if test="${g1.groupList.size()>0}">
-	                               										<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" style="padding: 3px 20px 3px 35px;color:#262626" name="${g1.id}" >${g1.title}<span class="fa arrow"></span></a>
-	                               									</c:if>
-	                               									<ul class="nav nav-third-level">
-	                               										<c:forEach var="g2" items="${g1.groupList}"> 
-	                            											<li>
-	                                  											<c:if test="${g2.groupList.size()==0}">
-					                               									<a href="javascript:void(0)" onclick="eSelectGroup(this)" style="padding: 3px 20px 3px 50px;color:#262626" name="${g2.id}" >${g2.title}</a>
-					                               								</c:if>
-					                               								<c:if test="${g2.groupList.size()>0}">
-					                               									<a href="javascript:void(0)" onclick="noClose()" data-stopPropagation="true" style="padding: 3px 20px 3px 50px;color:#262626" name="${g2.id}" >${g2.title}<span class="fa arrow"></span></a>
-					                               								</c:if>
-	                                  											<ul class="nav nav-third-level">
-	                                  												<c:forEach var="g3" items="${g2.groupList}"> 
-	                                  													<li>
-			                                   												<a href="javascript:void(0)" onclick="eSelectGroup(this)" style="padding: 3px 20px 3px 65px;color:#262626" name="${g3.id}" >${g3.title}</a>
-			                                   											</li>
-	                                  												</c:forEach>
-	                                  											</ul>
-	                                  										</li>
-	                               										</c:forEach>
-	                               									</ul>
-	                               								</li>
-	                            							</c:forEach>
-	                            						</ul>
-	                            					</li>
-	                            				</c:forEach>
+	                            				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
+	                            				<c:import url="groupList.jsp"></c:import>
 	                            			</ul>
 	                            		</li>
 	                                </div>
@@ -360,8 +350,6 @@
 			    }
 		    });
 	    }
-	    
-	    $("#eGroupList").metisMenu();
 	    
 	    $("#files").on("change",function(){
 			file = this.files[0];
@@ -456,6 +444,31 @@
     	        ].join('');
     	}
     	
+    	$table.bootstrapTable({});
+    	
+    	$(".fixed-table-toolbar").append("<div style=\"position: relative;margin: 10px 5px 10px 0px;line-height: 1.42857143;float: right;width:150px\"><li class='dropdown groupList' >"+$("#search_group_title").parent().parent().html()+"</li></div>");
+    	
+    	$(".groupList > ul").metisMenu();
+    	
+    	$("#search_group_list").find("a").each(function(index,e) {
+			var str = $(this).attr("data-stopPropagation");
+			if(str=="true"){
+				$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+       				e.stopPropagation();  
+   				});  
+			}else {
+				$(this).click(function(){
+   					$("#search_group_title").text($(this).text());
+   					var groupId = $(this).attr("name");
+   					if(index==0) {
+   						groupId = "";
+   					}
+   					$("#search_group_list").prev().attr("name",groupId);
+   					$table.bootstrapTable('refresh',{url:'${ctx}/video/list?type=${group.type}&groupId='+groupId});
+				});
+			}
+		});
+    	
     	function changeStatus(obj) {
     		var list = uploader.listFiles();
     		var status = list[0].state;
@@ -507,18 +520,31 @@
 		}
 		
 		function operateFormatter(value, row, index) {
-    		
-    		return [
+			if(row.status!=7) {
+				return [
     				'<a href="#" style="margin-right: 10px;">',
     	                '查看',
     	            '</a>',
-    	            '<a href="#" style="margin-right: 10px;" data-toggle="modal" data-target="#editModal" onclick="editVideo(\''+row.id+'\',\''+row.headImage+'\',\''+row.title+'\',\''+row.groupId+'\',\''+row.groupTitle+'\',\''+row.propertyId+'\')">',
+    	            '<a href="javascript:void(0)" style="margin-right: 10px;color:#ccc">',
     	                '编辑',
     	            '</a>',
     	            '<a href="#" data-toggle="modal" data-target="#delModal" onclick="delVideo(\''+row.id+'\')">',
     	                '删除',
     	            '</a>'
     	        ].join('');
+			}else {
+				return [
+    				'<a href="#" style="margin-right: 10px;">',
+    	                '查看',
+    	            '</a>',
+    	            '<a href="#" style="margin-right: 10px;color:#428bca" data-toggle="modal" data-target="#editModal" onclick="editVideo(\''+row.id+'\',\''+row.headImage+'\',\''+row.title+'\',\''+row.groupId+'\',\''+row.groupTitle+'\',\''+row.propertyId+'\')">',
+    	                '编辑',
+    	            '</a>',
+    	            '<a href="#" data-toggle="modal" data-target="#delModal" onclick="delVideo(\''+row.id+'\')">',
+    	                '删除',
+    	            '</a>'
+    	        ].join('');
+			}
     	}
     	
     	function editVideo(id, headImage, title, groupId, groupTitle, propertyId) {
@@ -579,82 +605,28 @@
     	}
     	
     	function groupFormatter(value, row, index) {
-    		return [
-    			'<div style="position:absolute">',
-    			'<li class="dropdown" onclick="initMenu()" style="list-style-type:none">',
-                    '<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#333;text-decoration:none">',
-                        '<span id="gTitle">未分组</span> <i class="fa fa-caret-down"></i>',
-                    '</a>',
-                    '<ul class="dropdown-menu" id="selGroupList">',
-                    	'<li>',
-	                    	'<a href="javascript:void(0)" onclick="selectGroup(this)" style="color:#262626" name="${group.id}" >未分组</a>',
-	                    '</li>',
-                    	<%
-                    		List<Map> list1 = (List<Map>)request.getAttribute("groupList");
-                    		for(int i=0;i<list1.size();i++) {%>
-                    		'<li>',
-                    			<%
-                    				List<Map> list2 = (List<Map>)list1.get(i).get("groupList");
-                    				if(list2.size()>0) {%>
-                    				'<a href="#" onclick="noClose()" data-stopPropagation="true" name="<%=list1.get(i).get("id")%>" ><%=list1.get(i).get("title") %><span class="fa arrow"></span></a>',
-                    			<%}else {%>
-                    				'<a href="#" onclick="selectGroup(this)" name="<%=list1.get(i).get("id")%>" ><%=list1.get(i).get("title") %></a>',
-                    			<%}%>
-	                            '<ul class="nav nav-second-level">',
-	                            	<%for(int n=0;n<list2.size();n++) {%>
-		                                '<li>',
-		                                	<%
-				                    			List<Map> list3 = (List<Map>)list2.get(n).get("groupList");
-				                    			if(list3.size()>0) {%>
-				                    			'<a href="#" onclick="noClose()" data-stopPropagation="true" name="<%=list2.get(n).get("id")%>" style="padding: 3px 20px 3px 35px;color:#262626"><%=list2.get(n).get("title")%><span class="fa arrow"></span></a>',
-				                    		<%}else {%>
-				                    			'<a href="#" onclick="selectGroup(this)" name="<%=list2.get(n).get("id")%>" style="padding: 3px 20px 3px 35px;color:#262626"><%=list2.get(n).get("title")%></a>',
-				                    		<%}%>
-		                                    '<ul class="nav nav-third-level">',
-				                            	<%for(int m=0;m<list3.size();m++) {%>
-					                                '<li>',
-					                                	<%
-				                    						List<Map> list4 = (List<Map>)list3.get(m).get("groupList");
-				                    						if(list3.size()>0) {%>
-				                    							'<a href="#" onclick="noClose()" data-stopPropagation="true" name="<%=list3.get(m).get("id")%>" style="padding: 3px 20px 3px 50px;color:#262626"><%=list3.get(m).get("title")%><span class="fa arrow"></span></a>',
-				                    						<%}else {%>
-				                    							'<a href="#" onclick="selectGroup(this)" name="<%=list3.get(m).get("id")%>" style="padding: 3px 20px 3px 50px;color:#262626"><%=list3.get(m).get("title")%></a>',
-				                    						<%}%>
-					                                    	'<ul class="nav nav-third-level">',
-							                            	<%for(int z=0;z<list4.size();z++) {%>
-								                                '<li>',
-								                                    '<a href="#" onclick="selectGroup(this)" name="<%=list4.get(z).get("id")%>" style="padding: 3px 20px 3px 65px;color:#262626"><%=list4.get(z).get("title")%></a>',
-								                                '</li>',
-							                                <%}%>
-							                            '</ul>',
-					                                '</li>',
-				                                <%}%>
-				                            '</ul>',
-		                                '</li>',
-	                                <%}%>
-	                            '</ul>',
-                        	'</li>',
-                        <%}%>
-                    '</ul>',
-                '</li></div>'
-    			].join('');
-    	}
-    	
-    	function noClose() {
-    		$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
-        		e.stopPropagation();  
-    		});  
-    	}
-    	
-    	function selectGroup(obj) {
-    		var groupId = $(obj).attr("name");
-    		var title = $(obj).text();
-    		$("#groupId").val(groupId);
-    		$("#gTitle").text(title);
+    		var html = $("#uploadTable").next().prop("outerHTML").replace("position:absolute;display: none","position:absolute;");
+    		return html;
     	}
     	
     	function initMenu() {
     		$("#selGroupList").metisMenu();
+    	}
+    	
+    	function groupClick() {
+    		$("#selGroupList").find("a").each(function(index,e) {
+				var str = $(this).attr("data-stopPropagation");
+				if(str=="true"){
+					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+	       				e.stopPropagation();  
+	   				});  
+				}else {
+					$(this).click(function(){
+	   					$("#groupId").val($(this).attr("name"));
+	   					$("#gTitle").text($(this).text());
+					});
+				}
+			});
     	}
 		
 		function clearUpload() {
@@ -683,12 +655,22 @@
 			return false;
 		} 
 		
-		function eSelectGroup(obj) {
-			var groupId = $(obj).attr("name");
-    		var title = $(obj).text();
-    		$("#editForm [name='groupId']").val(groupId);
-    		$("#eGTitle").text(title);
-		}
+		
+		$("#eGroupList").find("a").each(function(index,e) {
+			var str = $(this).attr("data-stopPropagation");
+			if(str=="true"){
+				$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+       				e.stopPropagation();  
+   				});  
+			}else {
+				$(this).click(function(){
+   					$("#editForm [name='groupId']").val($(this).attr("name"));
+   					$("#eGTitle").text($(this).text());
+				});
+			}
+		});
+		
+		
 		
 		function submit() {
 			var title = $("#title").val();

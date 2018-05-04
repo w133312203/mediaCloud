@@ -40,8 +40,8 @@ public class PictureAPI extends BaseCotroller{
     	if(groupId!=null&&first!=null&&max!=null) {
     		Group group = groupService.findById(groupId);
     		if(group!=null) {
-    			Group upGroup = groupService.findUpGroupById(0, group.getId());
-    			List<Property> propertyList = propertyService.listAll(0, upGroup.getId(), 0);
+    			//Group upGroup = groupService.findUpGroupById(0, group.getId());
+    			List<Property> propertyList = propertyService.listAll(0, groupId, 0);
     			if(propertyList.size()>0) {
     				Property p = new Property();
         			p.setId(0);

@@ -105,7 +105,6 @@
 	                <div class="col-lg-12">
 	                	<div id="toolbar">
            					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" onclick="openUpload()">上传图片</button>
-           					 <button type="button" class="btn btn-primary" onclick="window.location.href='${ctx}/property/index/${group.id}/0'">添加属性</button>
            					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="batch_edit()" id="btn_edit" disabled="disabled">批量分组</button>
            					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delModal" onclick="batch_delete()" id="btn_delete" disabled="disabled">批量删除</button>
            				</div>
@@ -142,7 +141,7 @@
                   					<a href="javascript:void(0)" style="color:#262626" >选择分组</a>
                   				</li>
                   				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
-                  				<c:import url="t.jsp"></c:import>
+                  				<c:import url="groupList.jsp"></c:import>
                   			</ul>
                   		</li>
 				        <div id="filePicker" style="display: none"></div>
@@ -203,7 +202,7 @@
 	                            					<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >未分组</a>
 	                            				</li>
 	                            				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
-	                            				<c:import url="t.jsp"></c:import>
+	                            				<c:import url="groupList.jsp"></c:import>
 	                            			</ul>
 	                            		</li>
 	                                </div>
@@ -213,9 +212,9 @@
 	                                	<label>图片属性：</label>
 	                                	<select class="form-control" name="propertyId" id="upload_property">
 	                                		<option value="">未选择</option>
-	                                		<c:forEach var="p" items="${propertyList}"> 
+	                                		<%-- <c:forEach var="p" items="${propertyList}"> 
 	                                			<option value="${p.id}">${p.title}</option>
-	                                		</c:forEach>
+	                                		</c:forEach> --%>
 	                                	</select>
 	                                </div>
                                 </div>
@@ -274,7 +273,7 @@
 	                            					<a href="javascript:void(0)" style="color:#262626" name="${group.id}" >未分组</a>
 	                            				</li>
 	                            				<c:set var="gpList" value='${groupList}' scope="request"></c:set>
-	                            				<c:import url="t.jsp"></c:import>
+	                            				<c:import url="groupList.jsp"></c:import>
 	                            			</ul>
 	                            		</li>
 	                                </div>
@@ -376,10 +375,7 @@
 	        }
 	    });
 	    
-	    if(propertyHtml!='') {
-	     	$(".fixed-table-toolbar").append("<div style=\"position: relative;margin: 10px 0px 10px 5px;line-height: 34px;float: right;width:150px\"><select id=\"searchGroup\" class=\"form-control\" ><option value=\"\">选择属性</option>"+propertyHtml+"</select></div>");
-	    }
-		
+	    $(".fixed-table-toolbar").append("<div style=\"position: relative;margin: 10px 0px 10px 5px;line-height: 34px;float: right;width:150px\"><select id=\"searchGroup\" class=\"form-control\" ><option value=\"\">选择属性</option>"+propertyHtml+"</select></div>");
 		
 		$(".fixed-table-toolbar").append("<div style=\"position: relative;margin: 10px 0px;line-height: 1.42857143;float: right;width:150px\"><li class='dropdown groupList' >"+$("#search_group_title").parent().parent().html()+"</li></div>");
 		
@@ -390,25 +386,41 @@
 		});
 		
 		$("#search_group_list").find("a").each(function(index,e) {
-				
-				var str = $(this).attr("data-stopPropagation");
-				if(str=="true"){
-					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
-        				e.stopPropagation();  
-    				});  
-				}else {
-					$(this).click(function(){
-    					$("#search_group_title").text($(this).text());
-    					var groupId = $(this).attr("name");
-    					if(index==0) {
-    						groupId = "";
-    					}
-    					$("#search_group_list").prev().attr("name",groupId);
-    					var propertyId = $("#searchGroup").val();
-    					$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}&groupId='+groupId+'&propertyId='+propertyId});
-					});
-				}
-			
+			var str = $(this).attr("data-stopPropagation");
+			if(str=="true"){
+				$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+       				e.stopPropagation();  
+   				});  
+			}else {
+				$(this).click(function(){
+   					$("#search_group_title").text($(this).text());
+   					var groupId = $(this).attr("name");
+   					if(index==0) {
+   						groupId = "";
+   					}
+   					$("#search_group_list").prev().attr("name",groupId);
+   					var propertyId = $("#searchGroup").val();
+   					$table.bootstrapTable('refresh',{url:'${ctx}/picture/list?type=${group.type}&groupId='+groupId+'&propertyId='+propertyId});
+   					$.ajax({
+		           		type: "GET",
+		           		url: "${ctx}/property/listByGroupId",
+		           		data: {groupId:groupId,type:0},
+		           		dataType: "json",
+		           		success: function(data){
+		        			var msg = eval(data);
+		           			if(msg.CODE=='10001') {
+		           				var html = "<option value=''>选择属性</option>";
+		           				for(var i=0;i<msg.list.length;i++) {
+		           					html += "<option value="+msg.list[i].id+">"+msg.list[i].title+"</option>";
+		           				}
+			    				$("#searchGroup").html(html);
+		           			}else {
+		           				alert("EXCEPTION");
+		           			}
+		           		}
+		       		});
+				});
+			}
 		});
 		
 		
@@ -436,7 +448,7 @@
     	
     	function startUpload() {
     		$("#upload_group_list").css("display","none");
-    		$(".groupList").attr("disabled","disabled");
+    		$("#upload_group_list").parent().attr("disabled","disabled");
     		$("#upload_property").attr("disabled","disabled");
     		$(".uploadBtn").removeClass("disabled");
 			$(".uploadBtn").click();
@@ -494,45 +506,70 @@
 	    	$("#delForm [name='id']").val(id);
 	    }
 		
-		$("#upload_group_list").find("a").eq(0).click(function(e){
-    		$("#upload_groupId").val($(this).attr("name"));
-    		$("#upload_group_title").text($(this).text());
-		});
-		
 		$("#upload_group_list").find("a").each(function(index,e) {
-			if(index>0) {
-				var str = $(this).attr("data-stopPropagation");
-				if(str=="true"){
-					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
-        				e.stopPropagation();  
-    				});  
-				}else {
-					$(this).click(function(){
-    					$("#upload_groupId").val($(this).attr("name"));
-    					$("#upload_group_title").text($(this).text());
-					});
-				}
+			var str = $(this).attr("data-stopPropagation");
+			if(str=="true"){
+				$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+       				e.stopPropagation();  
+   				});  
+			}else {
+				$(this).click(function(){
+   					$("#upload_groupId").val($(this).attr("name"));
+   					$("#upload_group_title").text($(this).text());
+   					var groupId = $(this).attr("name");
+   					$.ajax({
+		           		type: "GET",
+		           		url: "${ctx}/property/listByGroupId",
+		           		data: {groupId:groupId,type:0},
+		           		dataType: "json",
+		           		success: function(data){
+		        			var msg = eval(data);
+		           			if(msg.CODE=='10001') {
+		           				var html = "<option value=''>未选择</option>";
+		           				for(var i=0;i<msg.list.length;i++) {
+		           					html += "<option value="+msg.list[i].id+">"+msg.list[i].title+"</option>";
+		           				}
+			    				$("#upload_property").html(html);
+		           			}else {
+		           				alert("EXCEPTION");
+		           			}
+		           		}
+		       		});
+				});
 			}
 		});
 		
-		$("#edit_group_list").find("a").eq(0).click(function(e){
-    		$("#editForm [name='groupId']").val($(this).attr("name"));
-    		$("#edit_group_title").text($(this).text());
-		});
-		
 		$("#edit_group_list").find("a").each(function(index,e) {
-			if(index>0) {
-				var str = $(this).attr("data-stopPropagation");
-				if(str=="true"){
-					$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
-        				e.stopPropagation();  
-    				});  
-				}else {
-					$(this).click(function(){
-    					$("#editForm [name='groupId']").val($(this).attr("name"));
-    					$("#edit_group_title").text($(this).text());
-					});
-				}
+			var str = $(this).attr("data-stopPropagation");
+			if(str=="true"){
+				$("ul.dropdown-menu").on("click", "[data-stopPropagation]", function(e) {  
+       				e.stopPropagation();  
+   				});  
+			}else {
+				$(this).click(function(){
+   					$("#editForm [name='groupId']").val($(this).attr("name"));
+   					$("#edit_group_title").text($(this).text());
+   					var groupId = $(this).attr("name");
+   					$.ajax({
+		           		type: "GET",
+		           		url: "${ctx}/property/listByGroupId",
+		           		data: {groupId:groupId,type:0},
+		           		dataType: "json",
+		           		success: function(data){
+		        			var msg = eval(data);
+		           			if(msg.CODE=='10001') {
+		           				var html = "<option value=''>未选择</option>";
+		           				for(var i=0;i<msg.list.length;i++) {
+		           					html += "<option value="+msg.list[i].id+">"+msg.list[i].title+"</option>";
+		           				}
+			    				$("#edit_property").html(html);
+		           			}else {
+		           				alert("EXCEPTION");
+		           			}
+		           		}
+		       		});
+   					
+				});
 			}
 		});
 		
