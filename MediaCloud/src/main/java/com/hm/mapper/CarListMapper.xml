@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.dao.CarListDao">
+
+	<insert id="save" parameterType="com.hm.domain.CarList"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hm_car_list
+		(model,vin,color,status,location,comm,ins,outs) values
+		(#{model},#{vin},#{color},#{status},#{location},#{comm},#{ins},#{outs})
+	</insert>
+
+	<update id="update">
+		update hm_car_list set model =
+		#{model},vin = #{vin},color = #{color},status = #{status},location = #{location},comm = #{comm},ins = #{ins},outs = #{outs}
+		where id = #{id}
+	</update>
+
+	<select id="findById" resultType="CarList">
+		select * from
+		hm_car_list where id = #{id}
+	</select>
+	
+	<delete id="deleteById">
+		delete from hm_car_list where id = #{id}
+	</delete>
+	
+	<select id="list" resultType="CarList">
+		select c.*
+		from hm_car_list c where 1=1
+
+		<if test="search!=null and search!=''">
+			and (c.model like '%${search}%' or c.vin like '%${search}%' or c.color like '%${search}%' or c.location like '%${search}%') 
+		</if>
+
+		order by c.model limit #{first},#{max}
+	</select>
+	
+	<select id="listAll" resultType="CarList">
+		select c.* from hm_car_list c order by c.id
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(c.id) from hm_car_list
+		c where 1=1
+
+		<if test="search!=null and search!=''">
+			and (c.model like '%${search}%' or c.vin like '%${search}%' or c.color like '%${search}%' or c.location like '%${search}%') 
+		</if>
+
+	</select>
+
+</mapper>

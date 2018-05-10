@@ -12,6 +12,8 @@
 		<typeAlias alias="Picture" type="com.hm.domain.Picture"/>
 		<typeAlias alias="Video" type="com.hm.domain.Video"/>
 		<typeAlias alias="Property" type="com.hm.domain.Property"/>
+		<typeAlias alias="CarList" type="com.hm.domain.CarList"/>
+		<typeAlias alias="Materiel" type="com.hm.domain.Materiel"/>
 	</typeAliases>
 	<plugins>
   <!-- com.github.pagehelper为PageHelper类所在包名 -->

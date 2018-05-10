@@ -83,7 +83,7 @@
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> AMG用车记录<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">市场活动用车车单</a>
+                                    <a href="${ctx}/carList/index">市场活动用车车单</a>
                                 </li>
                                 <li>
                                     <a href="#">车辆零部件</a>
@@ -92,7 +92,7 @@
                                     <a href="#">AMG精品</a>
                                 </li>
                                 <li>
-                                    <a href="#">AMG物料</a>
+                                    <a href="${ctx}/materiel/index">AMG物料</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

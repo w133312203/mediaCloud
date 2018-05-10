@@ -51,5 +51,11 @@ public interface GroupDao extends BaseDao<Group>{
 	 * @param passportId 账号Id
 	 */
 	List<Map> findGroupByUploadType(@Param("passportId")Integer passportId, @Param("type")Integer type, @Param("uploadType")Integer uploadType);
+	
+	/**
+	 * 根据Id数组删除分组
+	 * @param idArray id数组
+	 */
+	void deleteByArrayId(@Param("array")String[] idArray);
 		
 }

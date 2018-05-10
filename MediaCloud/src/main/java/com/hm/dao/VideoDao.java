@@ -50,6 +50,13 @@ public interface VideoDao extends BaseDao<Video>{
 	void updateUpGroup(@Param("oldGroupId")Integer oldGroupId, @Param("newGroupId")Integer newGroupId);
 	
 	/**
+	 * 批量更新分组
+	 * @param Array 老分组数组
+	 * @param newGroupId 新分组
+	 */
+	void updateUpGroupByArray(@Param("array")String[] idArray, @Param("newGroupId")Integer newGroupId);
+	
+	/**
 	 * 批量删除属性
 	 * @param propertyId 属性Id
 	 */

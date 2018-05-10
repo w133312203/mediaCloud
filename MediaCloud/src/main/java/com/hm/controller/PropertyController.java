@@ -99,7 +99,7 @@ public class PropertyController extends BaseCotroller{
     
     //删除属性
     @RequestMapping("/delete")
-  	public ModelAndView deleteGroup(Integer id) {
+  	public ModelAndView delete(Integer id) {
     	ModelAndView mv = new ModelAndView();
     	if(id!=null) {
     		Property property = propertyService.findById(id);

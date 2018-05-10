@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.dao.MaterielDao">
+
+	<insert id="save" parameterType="com.hm.domain.Materiel"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hm_materiel
+		(items,nums,bz) values
+		(#{items},#{nums},#{bz})
+	</insert>
+
+	<update id="update">
+		update hm_materiel set items =
+		#{items},nums = #{nums},bz = #{bz}
+		where id = #{id}
+	</update>
+
+	<select id="findById" resultType="Materiel">
+		select * from
+		hm_materiel where id = #{id}
+	</select>
+	
+	<delete id="deleteById">
+		delete from hm_materiel where id = #{id}
+	</delete>
+	
+	<select id="list" resultType="Materiel">
+		select c.*
+		from hm_materiel c where 1=1
+
+		<if test="search!=null and search!=''">
+			and c.items like '%${search}%' 
+		</if>
+
+		order by c.id limit #{first},#{max}
+	</select>
+	
+	<select id="listAll" resultType="Materiel">
+		select c.* from hm_materiel c order by c.id
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(c.id) from hm_materiel
+		c where 1=1
+
+		<if test="search!=null and search!=''">
+			and c.items like '%${search}%' 
+		</if>
+
+	</select>
+
+</mapper>

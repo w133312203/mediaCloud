@@ -1,5 +1,6 @@
 package com.hm.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import com.hm.dao.PictureDao;
 import com.hm.dao.VideoDao;
 import com.hm.domain.Group;
 import com.hm.service.GroupService;
+import com.hm.utils.StringUtil;
 
 @Service("groupService")
 public class GroupServiceImpl implements GroupService{
@@ -79,14 +81,32 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public void deleteById(Integer id) {
 		Group group =findUpGroupById(null, id);
-		pictureDao.updateUpGroup(id, group.getId());
-		videoDao.updateUpGroup(id, group.getId());
-		groupDao.deleteById(id);
+		List<Map> groupList = findGroupByType(0,group.getType());
+		String arrayStr = id+","+getDownGroup(groupList,id);
+		String[] arrayId = arrayStr.split(",");
+		pictureDao.updateUpGroupByArray(arrayId, group.getId());
+		videoDao.updateUpGroupByArray(arrayId, group.getId());
+		groupDao.deleteByArrayId(arrayId);
 	}
 
 	@Override
 	public Group findById(Integer id) {
 		return groupDao.findById(id);
+	}
+	
+	private String getDownGroup(List<Map> groupList, Integer groupId) {
+		
+		String str = "";
+		for(Map map:groupList) {
+			if(map.get("groupId")!=null&&map.get("groupId").toString().equals(groupId.toString())) {
+				str += map.get("id").toString()+",";
+				String id = getDownGroup(groupList,Integer.parseInt(map.get("id").toString()));
+				if(!StringUtil.isEmpty(id)) {
+					str += id;
+				}
+			}
+		}
+		return str;
 	}
 	
 }

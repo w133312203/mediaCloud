@@ -25,6 +25,15 @@
 		update hm_picture set groupId = #{newGroupId}
 		where groupId = #{oldGroupId}
 	</update>
+	
+	<update id="updateUpGroupByArray">
+		update hm_picture set groupId = #{newGroupId}
+		where groupId in (
+		<foreach collection="array" item="item" separator=",">
+			#{item}
+		</foreach>
+		);
+	</update>
 
 	<select id="findById" resultType="Picture">
 		select * from
