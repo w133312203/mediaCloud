@@ -254,7 +254,7 @@
 	    }
     	
     	function operateFormatter(value, row, index) {
-    		if(row.hierarchy==4) {
+    		/* if(row.hierarchy==4) {
     			return [
     				'<a href="${ctx}/property/index/'+row.id+'/0" style="margin-right: 10px;">',
     	                '添加属性',
@@ -281,7 +281,22 @@
     	                '删除',
     	            '</a>'
     	        ].join('');
-    		}
+    		} */
+    		
+    		return [
+    	            '<a href="${ctx}/group/index/'+row.id+'" style="margin-right: 10px;">',
+    	                '添加分组',
+    	            '</a>',
+    	            '<a href="${ctx}/property/index/'+row.id+'/0" style="margin-right: 10px;">',
+    	                '添加属性',
+    	            '</a>',
+    	            '<a href="#" style="margin-right: 10px;" data-toggle="modal" data-target="#addGroupModal" onclick="editGroup(\''+row.id+'\',\''+row.title+'\',\''+row.level+'\',\''+row.uploadType+'\')">',
+    	                '编辑',
+    	            '</a>',
+    	            '<a href="#" data-toggle="modal" data-target="#delGroupModal" onclick="delGroup(\''+row.id+'\')">',
+    	                '删除',
+    	            '</a>'
+    	        ].join('');
     	}
     	
     	function isRealNum(val){

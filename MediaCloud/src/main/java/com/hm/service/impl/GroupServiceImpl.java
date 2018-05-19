@@ -1,6 +1,5 @@
 package com.hm.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -107,6 +106,11 @@ public class GroupServiceImpl implements GroupService{
 			}
 		}
 		return str;
+	}
+
+	@Override
+	public Integer findMaxHier(Integer type) {
+		return groupDao.findMaxHier(type);
 	}
 	
 }

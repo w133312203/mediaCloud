@@ -66,6 +66,11 @@
 		order by g.level,g.id desc
 	</select>
 	
+	<select id="findMaxHier" resultType="java.lang.Integer">
+		select max(g.hierarchy)
+		from hm_group g where g.passportId is null and g.type = #{type}
+	</select>
+	
 	<select id="findListByHierSec" resultType="Group">
 		select g1.*
 		from hm_group g1 inner join hm_group g2 on g1.groupId = g2.id where g1.passportId is null and g1.type = #{type} and g1.hierarchy = 2

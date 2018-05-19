@@ -15,6 +15,7 @@ import net.sf.json.JSONSerializer;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +26,7 @@ import com.hm.service.EnterpriseUserInfoService;
 import com.hm.service.EnterpriseUserPassportService;
 import com.hm.service.MaterielService;
 import com.hm.utils.ApplicationUtil;
+import com.hm.utils.ImageUtil;
 import com.hm.utils.StringUtil;
 
 @Controller
@@ -67,10 +69,13 @@ public class MaterielController extends BaseCotroller{
 		return map;
 	}
     
-    //保存车单
+    //保存物料
     @RequestMapping("/edit")
-  	public ModelAndView edit(Materiel materiel) {
+  	public ModelAndView edit(@RequestParam MultipartFile file, Materiel materiel) {
     	ModelAndView mv = new ModelAndView();
+    	if(file!=null&&!StringUtil.isEmpty(file.getOriginalFilename())) {
+    		materiel.setImageUrl(ImageUtil.uploadImage(file));
+    	}
     	if(materiel.getId()==null) {
     		materielService.save(materiel);
     		mv.setViewName("redirect:/materiel/index");
@@ -86,7 +91,7 @@ public class MaterielController extends BaseCotroller{
     	return mv;
   	}
     
-    //删除车单
+    //删除物料
     @RequestMapping("/delete")
   	public ModelAndView delete(Integer id) {
     	ModelAndView mv = new ModelAndView();
@@ -128,6 +133,7 @@ public class MaterielController extends BaseCotroller{
   		            	materiel.setItems(fields[0].trim());
   		            	materiel.setNums(fields[1].trim());
   		            	materiel.setBz(fields[2].trim());
+  		            	materielService.save(materiel);
   		            	count++;
   					}
   				}

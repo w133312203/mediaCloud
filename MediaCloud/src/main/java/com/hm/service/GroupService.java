@@ -58,4 +58,10 @@ public interface GroupService extends BaseService<Group>{
 	 */
 	List<Map> findGroupByType(Integer passportId, Integer type, Integer uploadType);
 	
+	/**
+	 * 查找最大层级
+	 * @param type 分组类型
+	 */
+	Integer findMaxHier(Integer type);
+	
 }

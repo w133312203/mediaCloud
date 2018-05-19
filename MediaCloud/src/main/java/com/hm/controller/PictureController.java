@@ -56,7 +56,7 @@ public class PictureController extends BaseCotroller{
     		Group group = groupService.findUpGroupById(0, Integer.parseInt(groupId));
     		if(group!=null) {
     			List<Map> groupList = groupService.findGroupByType(0, group.getType(), 1);
-    	    	//List<Property> propertyList = propertyService.listAll(0, group.getId(), 0);
+    			Integer hierarchy = groupService.findMaxHier(group.getType());
     	    	List<Map> newGroupList = new ArrayList<Map>();
     	    	Map groupMap = new HashMap();
     	    	for(Map map:groupList) {
@@ -67,7 +67,7 @@ public class PictureController extends BaseCotroller{
     	    		list.add(map);
     				groupMap.put(map.get("groupId").toString(),list);
     	    	}
-    	    	for(int i=4;i>=0;i--) {
+    	    	for(int i=hierarchy;i>=0;i--) {
     	    		String flag = "";
     	    		List<Map> list = new ArrayList<Map>();
     	    		for(Map map:groupList) {
@@ -90,7 +90,6 @@ public class PictureController extends BaseCotroller{
     	    	newGroupList = (List<Map>)newGroupList.get(0).get("groupList");
     	    	mv.addObject("group",group);
     	    	mv.addObject("groupList",newGroupList);
-    	    	//mv.addObject("propertyList",propertyList);
     			mv.setViewName(ApplicationUtil.JSP_URL+"picture");
     		}else {
     			mv.setViewName(ApplicationUtil.JSP_URL+"error");
@@ -143,7 +142,6 @@ public class PictureController extends BaseCotroller{
   	@RequestMapping("/upload")
   	public Map<String,Object> upload(@RequestParam MultipartFile[] file, Integer groupId, Integer propertyId) {
     	for(MultipartFile m:file) {
-    		//System.out.println(m.getOriginalFilename());
     		Picture picture = new Picture();
         	picture.setCreateTime(new Date());
         	if(groupId!=null) {

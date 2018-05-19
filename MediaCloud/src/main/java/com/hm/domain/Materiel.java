@@ -1,12 +1,14 @@
 package com.hm.domain;
 
 /**
- * 用车车单
+ * 物料
  * @author magic
  */
 public class Materiel {
 
 	private Integer id;
+	
+	private String imageUrl;//物品图片
 	
 	private String items;//条目
 	
@@ -44,6 +46,14 @@ public class Materiel {
 
 	public void setBz(String bz) {
 		this.bz = bz;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 	
 }

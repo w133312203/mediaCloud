@@ -29,6 +29,12 @@ public interface GroupDao extends BaseDao<Group>{
 	List<Map> findListByHier(@Param("passportId")Integer passportId, @Param("type")Integer type, @Param("hierarchy")Integer hierarchy);
 	
 	/**
+	 * 查找最大层级
+	 * @param type 分组类型
+	 */
+	Integer findMaxHier(@Param("type")Integer type);
+	
+	/**
 	 * 根据类型查找第二层级分组列表
 	 * @param passportId 账号Id
 	 */

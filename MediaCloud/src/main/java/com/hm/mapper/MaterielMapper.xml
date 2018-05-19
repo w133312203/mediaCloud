@@ -7,12 +7,12 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into
 		hm_materiel
-		(items,nums,bz) values
-		(#{items},#{nums},#{bz})
+		(imageUrl,items,nums,bz) values
+		(#{imageUrl},#{items},#{nums},#{bz})
 	</insert>
 
 	<update id="update">
-		update hm_materiel set items =
+		update hm_materiel set imageUrl = #{imageUrl},items =
 		#{items},nums = #{nums},bz = #{bz}
 		where id = #{id}
 	</update>
